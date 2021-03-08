@@ -1,4 +1,4 @@
-import os, glob, requests, shutil, time
+import os, glob, requests, shutil, time, json
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import pandas as pd # Pandas will be the backbone of our data manipulation.
@@ -10,10 +10,15 @@ import numpy as np # Numpy will help us handle some work with arrays.
 from datetime import datetime # Datetime will allow Python to recognize dates as dates, not strings.
 
 
-client_ID = 'Your_client_ID'
-client_secret = 'Your_client_secret'
+
+# client_ID = 'Your_client_ID'
+# client_secret = 'Your_client_secret'
 
 
+
+# -------------------------------
+# data analysis related functions
+# -------------------------------
 def get_New_Access_Tokens():
     """
     Since access tokens expire after 6 mins and you don’t want to have to do all the manual work (step 1&2) all over again.
@@ -24,7 +29,7 @@ def get_New_Access_Tokens():
     payload = {
         'client_id': client_ID,
         'client_secret': client_secret,
-        'refresh_token': "8accb1ee5a987ad9431b0ba3e081b118d27ae9fb",
+        'refresh_token': "92100886064939bc80039961f98833b8456f16c1",
         'grant_type': "refresh_token",
         'f': 'json'
     }
@@ -226,9 +231,12 @@ def display_Summary_Statistics(activity_data: pd.DataFrame):
         print('Analysis: No activities found!')
 
 
+# ------------------------------------
+# activity uploading related functions
+# ------------------------------------
 def upload_Fit_Activity_Files(access_token: str, dirpath: str):
     uploads_url = "https://www.strava.com/api/v3/uploads"
-    payload = {'client_id': client_ID, 'data_type': 'fit'}
+    payload = {'client_id': client_ID, 'data_type': 'fit', 'trainer': 1, 'commute': 0}
     header = {'Authorization': 'Bearer ' + access_token}
     
     os.chdir(dirpath)
@@ -239,55 +247,44 @@ def upload_Fit_Activity_Files(access_token: str, dirpath: str):
                                data=payload,
                                headers=header,
                                files=f )
-            print("Uploading activity... " + filename)
-            if r.status_code != 400:
-                upload_ID = r.json().get('id_str')
-                while(True):
-                    wait()
-                    error, activity_id = check_Upload_Status( access_token,
-                                                            filename,
-                                                            upload_ID )
-                    if (error):
+            print("Uploading your workout activity... " + filename)
+            # initial checks will be done for malformed data and duplicates.
+            if r.json().get('error') == None:
+                while (True):
+                    upload_ID = r.json().get('id_str')
+
+                    # polling the upload status per second
+                    wait(1)
+
+                    uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
+                    header = {'Authorization': 'Bearer ' + access_token}
+
+                    r = requests.get(uploads_url, headers=header)
+
+                    error = r.json().get('error')
+                    status = r.json().get('status')
+                    activity_id = r.json().get('activity_id')
+
+                    if (error is None) and (activity_id is None): # Possibility 1: Your activity is still being processed.
+                        print(status + '... ' + filename)
+                    elif (error):                                 # Possibility 2: There was an error processing your activity.
+                        print(status + '... ' + filename)
+                        print("Error: " + error)
+                        print("\n")
                         break
-                    if (activity_id != None):
+                    else:                                         # Possibility 3: Your activity is ready.
+                        print(status + ' ( ' + filename + ' )')
                         fitfile.close()
-                        moveToUploadedActivitiesFolder(filename)
+                        move_To_Uploaded_Activities_Folder(filename)
+                        print("\n")
                         break
             else:
-                print("There was an error processing your activity: " + filename)
-        
-
-def check_Upload_Status(access_token: str, filename: str, upload_ID: str):
-    """
-   
-    """
-    uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
-    header = {'Authorization': 'Bearer ' + access_token}
-
-    r = requests.get(uploads_url, headers = header)
-    response = r.json()
-    error = response.get('error')
-    status = response.get('status')
-    activity_id = response.get('activity_id')
-    
-    if (error is None) and (activity_id is None):
-        # Your activity is still being processed.
-        print(status + filename)
-        return False, activity_id
-    elif (error):
-        # There was an error processing your activity.
-        print(status + filename)
-        print("Error: " + error)
-        print("\n")
-        return True, activity_id
-    else:
-        # Your activity is ready.
-        print(status + filename)
-        print("\n")
-        return False, activity_id
+                print(r.json().get('status') + filename)
+                print("Error: " + r.json().get('error'))
+                print("\n")
     
        
-def wait(poll_interval=1.0):
+def wait(poll_interval):
     time.sleep(poll_interval)
 
 
