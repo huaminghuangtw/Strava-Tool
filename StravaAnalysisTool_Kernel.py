@@ -1,52 +1,18 @@
-import os, glob, requests, shutil, time, json
-import urllib3
+import requests, urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-import pandas as pd # Pandas will be the backbone of our data manipulation.
+import pandas as pd  # Pandas will be the backbone of our data manipulation.
 from pandas.io.json import json_normalize
-import seaborn as sns # Seaborn is a data visualization library.
-import matplotlib as mpl # Matplotlib is a data visualization library.
+import seaborn as sns  # Seaborn is a data visualization library.
+import matplotlib as mpl  # Matplotlib is a data visualization library.
 import matplotlib.pyplot as plt
-import numpy as np # Numpy will help us handle some work with arrays.
-from datetime import datetime # Datetime will allow Python to recognize dates as dates, not strings.
-
-
-
-# client_ID = 'Your_client_ID'
-# client_secret = 'Your_client_secret'
+import numpy as np  # Numpy will help us handle some work with arrays.
+from datetime import datetime  # Datetime will allow Python to recognize dates as dates, not strings.
 
 
 
 # -------------------------------
 # data analysis related functions
 # -------------------------------
-def get_New_Access_Tokens():
-    """
-    Since access tokens expire after 6 mins and you don’t want to have to do all the manual work (step 1&2) all over again.
-    So, We first makes a call using the refresh token to retrieve the the most recent access token to ensure your program will always run!
-    """
-    auth_url = "https://www.strava.com/oauth/token"
-
-    payload = {
-        'client_id': client_ID,
-        'client_secret': client_secret,
-        'refresh_token': "92100886064939bc80039961f98833b8456f16c1",
-        'grant_type': "refresh_token",
-        'f': 'json'
-    }
-    
-    print("Requesting new Access Token...\n")
-    res = requests.post(auth_url, data=payload, verify=False)
-
-    access_token = res.json()['access_token']
-    refresh_token = res.json()['refresh_token']
-
-    print("Access Token = {}".format(access_token))
-    print("Refresh Token = {}\n".format(refresh_token))
-
-
-    return access_token
-
-
 def get_Latest_Activity_Data(access_token: str, numberOfActivities: str) -> list:
     """
     Arguments:
@@ -116,7 +82,6 @@ def get_All_Activity_Data(access_token: str) -> list:
 
 
 def create_Activity_DataFrame(activity_data: list, filters=None) -> pd.DataFrame:
-
     activity_dataframe = pd.DataFrame(activity_data, columns=filters)
 
     return activity_dataframe
@@ -229,66 +194,3 @@ def display_Summary_Statistics(activity_data: pd.DataFrame):
         print()
     else:
         print('Analysis: No activities found!')
-
-
-# ------------------------------------
-# activity uploading related functions
-# ------------------------------------
-def upload_Fit_Activity_Files(access_token: str, dirpath: str):
-    uploads_url = "https://www.strava.com/api/v3/uploads"
-    payload = {'client_id': client_ID, 'data_type': 'fit', 'trainer': 1, 'commute': 0}
-    header = {'Authorization': 'Bearer ' + access_token}
-    
-    os.chdir(dirpath)
-    for filename in glob.glob("*.fit"):   # glob.glob("%s/*.fit" % dirpath)
-        with open(filename, 'rb') as fitfile:
-            f = {'file' : fitfile}
-            r = requests.post( uploads_url,
-                               data=payload,
-                               headers=header,
-                               files=f )
-            print("Uploading your workout activity... " + filename)
-            # initial checks will be done for malformed data and duplicates.
-            if r.json().get('error') == None:
-                while (True):
-                    upload_ID = r.json().get('id_str')
-
-                    # polling the upload status per second
-                    wait(1)
-
-                    uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
-                    header = {'Authorization': 'Bearer ' + access_token}
-
-                    r = requests.get(uploads_url, headers=header)
-
-                    error = r.json().get('error')
-                    status = r.json().get('status')
-                    activity_id = r.json().get('activity_id')
-
-                    if (error is None) and (activity_id is None): # Possibility 1: Your activity is still being processed.
-                        print(status + '... ' + filename)
-                    elif (error):                                 # Possibility 2: There was an error processing your activity.
-                        print(status + '... ' + filename)
-                        print("Error: " + error)
-                        print("\n")
-                        break
-                    else:                                         # Possibility 3: Your activity is ready.
-                        print(status + ' ( ' + filename + ' )')
-                        fitfile.close()
-                        move_To_Uploaded_Activities_Folder(filename)
-                        print("\n")
-                        break
-            else:
-                print(r.json().get('status') + filename)
-                print("Error: " + r.json().get('error'))
-                print("\n")
-    
-       
-def wait(poll_interval):
-    time.sleep(poll_interval)
-
-
-def move_To_Uploaded_Activities_Folder(filename: str):
-    source = os.path.join(os.getcwd(), filename)
-    dest = r"C:\Users\USER\Documents\Zwift\Activities\UploadedActivities"
-    shutil.move(source, dest)

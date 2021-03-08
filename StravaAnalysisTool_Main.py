@@ -1,4 +1,5 @@
-from StravaTool_Kernel import *
+from authentication import *
+from StravaAnalysisTool_Kernel import *
 
 
 # ----------------------------------------------------------------------------------------------------------------------
