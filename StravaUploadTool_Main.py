@@ -8,7 +8,7 @@ from StravaUploadTool_Kernel import *
 # 1) Get authorization code from authorization page. This is a one-time, manual step.
 #    Paste the below code in a browser, hit enter then grab the "code" part from the resulting url.
 #
-# https://www.strava.com/oauth/authorize?client_id=your_client_id&redirect_uri=http://localhost&response_type=code&scope=activity:read_all
+# https://www.strava.com/oauth/authorize?client_id=your_client_id&redirect_uri=http://localhost&response_type=code&scope=activity:read_all,activity:write
 #
 # 2) Make a POST request to Strava: exchange authorization code for access token & refresh token (This also only needs to be done once)
 #

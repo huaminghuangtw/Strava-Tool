@@ -8,7 +8,7 @@ from StravaAnalysisTool_Kernel import *
 # 1) Get authorization code from authorization page. This is a one-time, manual step.
 #    Paste the below code in a browser, hit enter then grab the "code" part from the resulting url.
 #
-# https://www.strava.com/oauth/authorize?client_id=your_client_id&redirect_uri=http://localhost&response_type=code&scope=activity:read_all
+# https://www.strava.com/oauth/authorize?client_id=your_client_id&redirect_uri=http://localhost&response_type=code&scope=activity:read_all,activity:write
 #
 # 2) Make a POST request to Strava: exchange authorization code for access token & refresh token (This also only needs to be done once)
 #
@@ -33,7 +33,7 @@ def main():
     new_access_token = get_New_Access_Tokens()
 
     ## Getting activity data from Strava
-    #my_dataset = get_Latest_Activity_Data(new_access_token, 10)
+    #my_dataset = get_Latest_Activity_Data(new_access_token, 30)
     #my_dataset = get_All_Activity_Data(new_access_token)
     my_dataset = get_Timeinterval_Activity_Data(new_access_token, "1546300799", "1514764800")
 
@@ -51,6 +51,9 @@ def main():
 
     activities = create_Activity_DataFrame(activities)
     #print(activities.head(5))
+
+
+    # activities.to_csv('myfile.csv')
 
 
     # for id in activities['id']:
@@ -78,9 +81,11 @@ def main():
     # hike = activities.loc[activities['type'] == 'Hike']
     # run = activities.loc[activities['type'] == 'Run']
 
+
     #plot_colour_palette = ["#2C3E50", "#E74C3C", "#ECF0F1", "#3498DB", "#2980B9",
     #                       "#195962", "#F56F6C", "#FFFFFF", "#252932", "#191C21"]
     #display_Activity_Count_Plot(activities, plot_colour_palette)
+
 
     display_Summary_Statistics(activities)
 

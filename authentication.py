@@ -4,10 +4,6 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 def get_New_Access_Tokens():
-    """
-    Since access tokens expire after 5 hours and you don’t want to have to do all the manual work (step 1&2) all over again.
-    So, We first makes a call using the refresh token to retrieve the the most recent access token to ensure your program will always run!
-    """
     auth_url = "https://www.strava.com/oauth/token"
 
     payload = {
