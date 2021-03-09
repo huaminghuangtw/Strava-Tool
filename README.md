@@ -5,7 +5,7 @@ This project is my personal side project with Strava API.
 The goal of this project is to analyze my training data for better future performance, as well as to **hone my Data Analysis & Visualization skills**.
 The idea was originally coming from the fact that my increasing demands for uploading indoor cycling activity data to Strava, especially in the lockdown time of COVID-19.
 I usually did indoor training with Zwift during the weekdays and long weekend group ride on the weekend.
-When training indoors with Zwift, I used to also record my cycling workout with my own bicycle computer, for more workout information like power zone, laps, time, etc.
+When training indoors with Zwift, I used to also record my cycling workout with a bicycle computer, for more workout information like power zone, laps, time, etc.
 This means there will be two generated files pointing to the same activity in the end. 
 If you have authorized Zwift to connect with Strava beforehand, each of your virtual ride data will be AUTOMATICALLY synchronized to Strava.
 That's really exciting and satisfying when you saw a Strava notification telling you that "Your activity is ready." after suffering on the saddle for hours.
