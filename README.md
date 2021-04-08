@@ -19,13 +19,13 @@ in order to know what's happening under the hood.
 Therefore, I disabled the connection between the two Apps, and started developing a toy StravaAutoUploader tool with Python as the starting point of this side project.
 Hopefully it could be someday extended to have some advanced features like Golden Cheetah, TrainingPeaks, for analyzing, tracking, and predicting my performance on the bike!
 
-## Features (just name a few, not completed yet)
+## Features (__just name a few, not completed yet__)
 - uploading workout (ride, run, hike, etc.) activity files with the help of script automation using Task Scheduler (Windows)
 - analyzing workout data using Pandas package  
   e.g.,
     - yearly summary (similar to [Strava Year in Sport Data Report](https://blog.strava.com/press/yis2020/))  
-    - How many workout activities I did per month/week in ayear?
-      ![2018summary](Figures/Number of activities per month in 2018.png)
+    - How many workout activities I did per month/week in ayear?  
+      ![2018summary](/Figures/Number-of-activities-per-month-in-2018.png)
     - How much time I spent on cycling activities per month/week in a year?
     - etc.
 - visualizing workout data using Seaborn and Matplotlib libraries as well as Tableau software   
