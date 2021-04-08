@@ -24,7 +24,7 @@ Hopefully it could be someday extended to have some advanced features like Golde
 - analyzing workout data using Pandas package  
   e.g.,
     - yearly summary (similar to [Strava Year in Sport Data Report](https://blog.strava.com/press/yis2020/))  
-    - How many workout activities I did per month/week in ayear?  
+    - How many workout activities I did per month/week in a year?  
       ![2018summary](/Figures/Number%20of%20activities%20per%20month%20in%202018.png)
     - How much time I spent on cycling activities per month/week in a year?
     - etc.
