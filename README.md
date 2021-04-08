@@ -1,4 +1,7 @@
-# Strava-Tool
+Strava-Tool
+===========
+
+> A personal side project with Strava API using Python. 
 
 ## Motivation
 This project is my personal side project with Strava API.
