@@ -1,4 +1,3 @@
-from authentication import *
 from StravaUploadTool_Kernel import *
 
 

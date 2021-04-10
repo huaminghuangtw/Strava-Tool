@@ -1,5 +1,3 @@
-from authentication import *
-
 import requests, urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import os, glob, shutil, time

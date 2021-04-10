@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/StravaAutoUploader.iml" filepath="$PROJECT_DIR$/.idea/StravaAutoUploader.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/StravaTool.iml" filepath="$PROJECT_DIR$/.idea/StravaTool.iml" />
     </modules>
   </component>
 </project>

@@ -20,12 +20,12 @@ Therefore, I disabled the connection between the two Apps, and started developin
 Hopefully it could be someday extended to have some advanced features like Golden Cheetah, TrainingPeaks, for analyzing, tracking, and predicting my performance on the bike!
 
 ## Features (__just name a few, not completed yet__)
-- uploading workout (ride, run, hike, etc.) activity files with the help of script automation using Task Scheduler (Windows)
+- uploading workout (Ride, Virtual Ride, Run, Hike, etc.) activity files with the help of script automation using Task Scheduler (Windows)
 - analyzing workout data using Pandas package  
   e.g.,
     - yearly summary (similar to [Strava Year in Sport Data Report](https://blog.strava.com/press/yis2020/))  
     - How many workout activities I did per month/week in a year?  
-      ![2018summary](/Figures/Number%20of%20activities%20per%20month%20in%202018.png)
+      ![2018summary](/Figures/Number_of_activities_per_month_in_2018.png)
     - How much time I spent on cycling activities per month/week in a year?
     - etc.
 - visualizing workout data using Seaborn and Matplotlib libraries as well as Tableau software   
