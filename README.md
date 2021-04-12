@@ -19,6 +19,10 @@ in order to know what's happening under the hood.
 Therefore, I disabled the connection between the two Apps, and started developing a toy StravaAutoUploader tool with Python as the starting point of this side project.
 Hopefully it could be someday extended to have some advanced features like Golden Cheetah, TrainingPeaks, for analyzing, tracking, and predicting my performance on the bike!
 
+<p align="center">
+  <img width="300" height="460" src="https://user-images.githubusercontent.com/43208378/114391662-0a980000-9b98-11eb-9e49-9f48a532908f.JPG">
+</p>
+
 ## Features (__just name a few, not completed yet__)
 - uploading workout (Ride, Virtual Ride, Run, Hike, etc.) activity files with the help of script automation using Task Scheduler (Windows)
 - analyzing workout data using Pandas package  
