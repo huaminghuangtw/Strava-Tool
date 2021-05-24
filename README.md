@@ -24,7 +24,8 @@ Hopefully it could be someday extended to have some advanced features like Golde
 </p>
 
 ## Features (__just name a few, not completed yet__)
-- uploading workout (Ride, Virtual Ride, Run, Hike, etc.) activity files with the help of script automation using Task Scheduler (Windows)
+- uploading workout (Ride, Virtual Ride, Run, Hike, etc.) activity files with the help of batch script automation using Task Scheduler (Windows)
+  ![upload](https://user-images.githubusercontent.com/43208378/119350059-287c7880-bc9f-11eb-8b87-05869506b9bd.png)
 - analyzing workout data using Pandas package  
   e.g.,
     - yearly summary (similar to [Strava Year in Sport Data Report](https://blog.strava.com/press/yis2020/))  
