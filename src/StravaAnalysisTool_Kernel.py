@@ -5,6 +5,7 @@ from pandas.io.json import json_normalize
 import seaborn as sns  # Seaborn is a data visualization library.
 import matplotlib as mpl  # Matplotlib is a data visualization library.
 import matplotlib.pyplot as plt
+import json
 import numpy as np  # Numpy will help us handle some work with arrays.
 from datetime import datetime  # Datetime will allow Python to recognize dates as dates, not strings.
 
@@ -186,7 +187,6 @@ def display_Summary_Statistics(activity_data: pd.DataFrame):
 
     if not activity_data.empty:
         summary_statistics = activity_data.groupby('type').apply(_generate_Summary_Statistics)
-
         print()
         print('Summary statistics:')
         print()

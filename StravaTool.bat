@@ -1,2 +1,2 @@
-"C:\Users\USER\Anaconda3\python.exe" "G:\My Drive\sourcecode\pythonscripts\StravaTool\StravaUploadTool_Main.py"
+"C:\Users\USER\miniconda3\python.exe" "G:\My Drive\sourcecode\pythonscripts\StravaTool\src\StravaUploadTool_Main.py"
 pause

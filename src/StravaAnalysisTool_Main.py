@@ -33,23 +33,23 @@ def main():
     new_access_token = get_New_Access_Tokens()
 
     ## Getting activity data from Strava
-    #my_dataset = get_Latest_Activity_Data(new_access_token, 30)
+    my_dataset = get_Latest_Activity_Data(new_access_token, 1)
     #my_dataset = get_All_Activity_Data(new_access_token)
-    my_dataset = get_Timeinterval_Activity_Data(new_access_token, "1546300799", "1514764800")
+    #my_dataset = get_Timeinterval_Activity_Data(new_access_token, "1546300799", "1514764800")
 
 
-    #print( json.dumps(my_dataset, indent=4, sort_keys=True) ) # pretty printing a json file
+    print( json.dumps(my_dataset, indent=4, sort_keys=True) ) # pretty printing a json file
 
 
     # ============================================
     # Data Manipulation & Analysis & Visualization
     # ============================================
-    activities = pd.json_normalize(my_dataset) # pandas.json_normalize: normalizes semi-structured JSON data into a flat "table".
+    #activities = pd.json_normalize(my_dataset) # pandas.json_normalize: normalizes semi-structured JSON data into a flat "table".
     # print(activities.columns) # list of all column names in the table
     # print(activities.shape) # dimensions of the table
 
 
-    activities = create_Activity_DataFrame(activities)
+    #activities = create_Activity_DataFrame(activities)
     #print(activities.head(5))
 
 
@@ -87,7 +87,7 @@ def main():
     #display_Activity_Count_Plot(activities, plot_colour_palette)
 
 
-    display_Summary_Statistics(activities)
+    #display_Summary_Statistics(activities)
 
 
 if __name__ == "__main__":
