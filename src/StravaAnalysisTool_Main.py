@@ -37,9 +37,9 @@ def main():
     #my_dataset = get_All_Activity_Data(new_access_token)
     #my_dataset = get_Timeinterval_Activity_Data(new_access_token, "1546300799", "1514764800")
 
-
+	
     print( json.dumps(my_dataset, indent=4, sort_keys=True) ) # pretty printing a json file
-
+	
 
     # ============================================
     # Data Manipulation & Analysis & Visualization

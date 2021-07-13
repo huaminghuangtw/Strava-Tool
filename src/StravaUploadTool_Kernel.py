@@ -1,20 +1,20 @@
 from authentication import *
+from file_manipulation import *
 import requests, urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-import os, glob, shutil, time
-
+import os, glob, time
 
 
 # ------------------------------------
 # activity uploading related functions
 # ------------------------------------
-def upload_Fit_Activity_Files(access_token: str, dirpath: str):
+def upload_Fit_Activity_Files(access_token: str):
     uploads_url = "https://www.strava.com/api/v3/uploads"
     payload = {'client_id': client_ID, 'data_type': 'fit'}
     header = {'Authorization': 'Bearer ' + access_token}
 
-    os.chdir(dirpath)
-    for filename in glob.glob("*.fit"):  # glob.glob("%s/*.fit" % dirpath)
+    os.chdir(os.path.join(zwift_activity_dir, "FixedActivities"))
+    for filename in glob.glob("*.fit"):
         with open(filename, 'rb') as fitfile:
             f = {'file': fitfile}
             r = requests.post(uploads_url,
@@ -88,9 +88,3 @@ def check_Upload_Status(access_token: str, filename: str, upload_ID: str):
 
 def wait(poll_interval):
     time.sleep(poll_interval)
-
-
-def move_To_Uploaded_Activities_Folder(filename: str):
-    source = os.path.join(os.getcwd(), filename)
-    dest = r"C:\Users\USER\Documents\Zwift\Activities\UploadedActivities"
-    shutil.move(source, dest)

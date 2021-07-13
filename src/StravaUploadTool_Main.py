@@ -1,5 +1,6 @@
 from authentication import *
 from StravaUploadTool_Kernel import *
+from fitfiletools_automation import *
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -32,8 +33,8 @@ def main():
     """
     new_access_token = get_New_Access_Tokens()
 
-    dirpath = r'C:\Users\USER\Documents\Zwift\Activities\FixedActivities'
-    upload_Fit_Activity_Files(new_access_token, dirpath)
+    fix_Fit_Activity_Files()
+    upload_Fit_Activity_Files(new_access_token)
 
 
 if __name__ == "__main__":

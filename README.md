@@ -30,14 +30,17 @@ Hopefully it could be someday extended to have some advanced features like Golde
   e.g.,
     - yearly summary (similar to [Strava Year in Sport Data Report](https://blog.strava.com/press/yis2020/))  
     - How many workout activities I did per month/week in a year?  
-      ![2018summary](/Figures/Number_of_activities_per_month_in_2018.png)
+      ![2018summary](/figures/Number_of_activities_per_month_in_2018.png)
     - How much time I spent on cycling activities per month/week in a year?
     - etc.
 - visualizing workout data using Seaborn and Matplotlib libraries as well as Tableau software   
   e.g.,
     - heatmap
     - etc.
-    
+
+## How to use the code
+https://selenium-python.readthedocs.io/installation.html#drivers
+
 ## Good Resources
 - Getting started with Strava API:
   - [Getting Started With The Strava API: A Tutorial](https://medium.com/@annthurium/getting-started-with-the-strava-api-a-tutorial-f3909496cd2d)
