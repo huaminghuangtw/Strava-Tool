@@ -65,7 +65,7 @@ def upload_Fit_Activity_Files(access_token: str):
                     move_To_Uploaded_Activities_Folder(filename)
                     break
     
-    print("End of uploading.\n")
+    print("---------- End of uploading ----------\n")
 
 
 def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tuple[bool, Any]:
@@ -83,12 +83,10 @@ def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tup
         return (False, activity_id)
     elif (error):                                  # Possibility 2: There was an error processing your activity. (check for malformed data and duplicates)
         print(status + '.. ' + filename)
-        print("ERROR - " + error)
-        print("\n")
+        print("ERROR - " + error + '\n')
         return (True, activity_id)
     else:                                          # Possibility 3: Your activity is ready.
-        print(status + ' ( ' + filename + ' )')
-        print("\n")
+        print(status + ' ( ' + filename + ' )' + '\n')
         return (False, activity_id)
 
 

@@ -16,9 +16,9 @@ def move_To_Fixed_Activities_Folder(filename: str):
     dest = os.path.join(zwift_activity_dir, "FixedActivities")
     shutil.move(source, dest)
 
-def move_To_Temp_Folder(filename: str):
+def move_To_Original_Activities_Folder(filename: str):
     source = os.path.join(zwift_activity_dir, filename)
-    dest = os.path.join(zwift_activity_dir, "Temp")
+    dest = os.path.join(zwift_activity_dir, "OriginalActivities")
     shutil.move(source, dest)
 
 def rename_FitFile(newfilename: str, fitfilename: str = "fitfiletools.fit"):

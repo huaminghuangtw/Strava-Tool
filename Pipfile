@@ -11,6 +11,7 @@ seaborn = "*"
 matplotlib = "*"
 selenium = "*"
 pyautogui = "*"
+pyperclip = "*"
 
 [dev-packages]
 

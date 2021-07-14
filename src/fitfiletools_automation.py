@@ -6,8 +6,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
-import os, glob, pyautogui, time, sys
+import os, glob, pyautogui, time, sys, pyperclip
 from datetime import datetime
+from typing import Any
 
 
 def fix_Fit_Activity_Files():
@@ -19,23 +20,25 @@ def fix_Fit_Activity_Files():
     else:
         print("Start fixing...\n")
 
+        dir = os.path.dirname(__file__)
+        WEB_DRIVER_PATH = os.path.abspath( os.path.join(dir, '..', 'webdriver', 'geckodriver.exe') )
+        LOG_FILE_PATH = os.path.abspath( os.path.join(dir, '..', 'logfile', 'geckodriver.log') )
+        driver = webdriver.Firefox(executable_path=WEB_DRIVER_PATH, service_log_path=LOG_FILE_PATH)
+        driver.maximize_window()
+
+        # Step 1: open the webpage of FIT File Tools
+        driver.get("https://www.fitfiletools.com/#/top")
+
         for fitfile in fitfile_list:
             
             path_to_fitfile = os.path.join(zwift_activity_dir, fitfile)
             
             # check if the size of the fit file is larger than 10KB
             if (os.path.getsize(path_to_fitfile) < 10000):
-                move_To_Temp_Folder(fitfile)
+                move_To_Original_Activities_Folder(fitfile)
             else:
                 try:
-                    dir = os.path.dirname(__file__)
-                    WEB_DRIVER_PATH = os.path.abspath( os.path.join(dir, '..', 'webdriver', 'geckodriver.exe') )
-                    LOG_FILE_PATH = os.path.abspath( os.path.join(dir, '..', 'logfile', 'geckodriver.log') )
-                    driver = webdriver.Firefox(executable_path=WEB_DRIVER_PATH, service_log_path=LOG_FILE_PATH)
-                    driver.maximize_window()
-
-                    # Step 1: open the webpage of FIT File Tools
-                    driver.get("https://www.fitfiletools.com/#/top")
+                    print("Fixing " + fitfile + "...\n")
 
                     # Step 2: click the "Launch" button of "Time Adjuster"
                     element = WebDriverWait(driver, 5).until(
@@ -48,12 +51,12 @@ def fix_Fit_Activity_Files():
                         EC.presence_of_element_located((By.XPATH, "//button[@ng-file-select='']"))
                     )
                     element.click()
-                    time.sleep(3)
+                    time.sleep(1)
                     
                     # Step 4: select the corresponding fit file to be fixed
-                    pyautogui.write(path_to_fitfile, interval=0.05)
-                    pyautogui.click()   # simulates a single, left-button mouse click at the mouse’s current position
-                    element.send_keys(Keys.RETURN)   # in case the mouse's click doesn't work...
+                    pyperclip.copy(path_to_fitfile)   # copy to clipboard
+                    pyautogui.hotkey('ctrl', "v")   # ctrl-v to paste from clipboard
+                    finish_file_selection(element)
                     time.sleep(1)
 
                     # Step 5: select the start date of the activity
@@ -130,8 +133,8 @@ def fix_Fit_Activity_Files():
                     rename_FitFile(newfilename)
                     move_To_Fixed_Activities_Folder(newfilename)
 
-                    # Step 11: move the original fit file in zwift_activity_dir to Temp folder
-                    move_To_Temp_Folder(fitfile)
+                    # Step 11: move the original fit file in zwift_activity_dir to OriginalActivities folder
+                    move_To_Original_Activities_Folder(fitfile)
 
                 except TimeoutException:
                     print("ERROR - Timeout!")
@@ -141,6 +144,13 @@ def fix_Fit_Activity_Files():
                     print("ERROR - Cannot find the element!")
                     driver.quit()
         
-        # Finally, close the browser window
+        # Step 12: finally, close the browser window
         driver.quit()
-        print("End of fixing.\n")
+        print("---------- End of fixing ----------\n")
+
+
+def finish_file_selection(element: Any):
+    try:
+        pyautogui.click()   # simulate a single, left-button mouse click at the mouse’s current position
+    except:
+        element.send_keys(Keys.RETURN)   # in case the mouse's click doesn't work... 
