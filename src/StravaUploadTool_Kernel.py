@@ -3,6 +3,8 @@ from file_manipulation import *
 import requests, urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 import os, glob, time
+from typing import Any, Tuple
+
 
 
 # ------------------------------------
@@ -10,8 +12,10 @@ import os, glob, time
 # ------------------------------------
 def upload_Fit_Activity_Files(access_token: str):
     uploads_url = "https://www.strava.com/api/v3/uploads"
-    payload = {'client_id': client_ID, 'data_type': 'fit'}
+    payload = {'client_id': CLIENT_ID, 'data_type': 'fit'}
     header = {'Authorization': 'Bearer ' + access_token}
+
+    print("Start uploading...\n")
 
     os.chdir(os.path.join(zwift_activity_dir, "FixedActivities"))
     for filename in glob.glob("*.fit"):
@@ -60,9 +64,11 @@ def upload_Fit_Activity_Files(access_token: str):
                     fitfile.close()
                     move_To_Uploaded_Activities_Folder(filename)
                     break
+    
+    print("End of uploading.\n")
 
 
-def check_Upload_Status(access_token: str, filename: str, upload_ID: str):
+def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tuple[bool, Any]:
     uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
     header = {'Authorization': 'Bearer ' + access_token}
     
@@ -74,17 +80,17 @@ def check_Upload_Status(access_token: str, filename: str, upload_ID: str):
 
     if (error is None) and (activity_id is None):  # Possibility 1: Your activity is still being processed.
         print(status + '.. ' + filename)
-        return False, activity_id
+        return (False, activity_id)
     elif (error):                                  # Possibility 2: There was an error processing your activity. (check for malformed data and duplicates)
         print(status + '.. ' + filename)
         print("ERROR - " + error)
         print("\n")
-        return True, activity_id
+        return (True, activity_id)
     else:                                          # Possibility 3: Your activity is ready.
         print(status + ' ( ' + filename + ' )')
         print("\n")
-        return False, activity_id
+        return (False, activity_id)
 
 
-def wait(poll_interval):
+def wait(poll_interval: float):
     time.sleep(poll_interval)

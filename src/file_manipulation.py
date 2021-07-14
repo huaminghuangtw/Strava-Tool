@@ -1,8 +1,10 @@
 import os, shutil
 from pathlib import Path
 
-downloads_path = str(os.path.join(Path.home(), "Downloads"))
+
+downloads_path = str( os.path.join(Path.home(), "Downloads") )
 zwift_activity_dir = r"C:\Users\USER\Documents\Zwift\Activities"
+
 
 def move_To_Uploaded_Activities_Folder(filename: str):
     source = os.path.join(zwift_activity_dir, "FixedActivities", filename)

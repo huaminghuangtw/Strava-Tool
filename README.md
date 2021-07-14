@@ -40,6 +40,8 @@ Hopefully it could be someday extended to have some advanced features like Golde
 
 ## How to use the code
 https://selenium-python.readthedocs.io/installation.html#drivers
+batchfile
+english keyboard
 
 ## Good Resources
 - Getting started with Strava API:
