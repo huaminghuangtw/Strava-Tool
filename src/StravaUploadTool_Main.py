@@ -1,5 +1,6 @@
 from authentication import *
 from StravaUploadTool_Kernel import *
+from fitfiletools_automation import *
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -30,10 +31,17 @@ def main():
     Since access tokens expire after 5 hours and you don’t want to have to do all the manual work (step 1&2) all over again.
     So, We first makes a call using the refresh token to retrieve the the most recent access token to ensure your program will always run!
     """
-    new_access_token = get_New_Access_Tokens()
+    print(r"""
+         _______..___________..______           ___   ____    ____  ___      __    __  .______    __        ______        ___       _______  .___________.  ______     ______    __      
+        /       ||           ||   _  \         /   \  \   \  /   / /   \    |  |  |  | |   _  \  |  |      /  __  \      /   \     |       \ |           | /  __  \   /  __  \  |  |     
+       |   (----``---|  |----`|  |_)  |       /  ^  \  \   \/   / /  ^  \   |  |  |  | |  |_)  | |  |     |  |  |  |    /  ^  \    |  .--.  |`---|  |----`|  |  |  | |  |  |  | |  |     
+        \   \        |  |     |      /       /  /_\  \  \      / /  /_\  \  |  |  |  | |   ___/  |  |     |  |  |  |   /  /_\  \   |  |  |  |    |  |     |  |  |  | |  |  |  | |  |     
+    .----)   |       |  |     |  |\  \----. /  _____  \  \    / /  _____  \ |  `--'  | |  |      |  `----.|  `--'  |  /  _____  \  |  '--'  |    |  |     |  `--'  | |  `--'  | |  `----.
+    |_______/        |__|     | _| `._____|/__/     \__\  \__/ /__/     \__\ \______/  | _|      |_______| \______/  /__/     \__\ |_______/     |__|      \______/   \______/  |_______|
 
-    dirpath = r'C:\Users\USER\Documents\Zwift\Activities\FixedActivities'
-    upload_Fit_Activity_Files(new_access_token, dirpath)
+    """)
+    fix_Fit_Activity_Files()
+    upload_Fit_Activity_Files(get_New_Access_Tokens())
 
 
 if __name__ == "__main__":

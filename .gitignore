@@ -1,3 +1,5 @@
 __pycache__/
 .idea/
+.vscode/
 client_configuration_file.py
+logfile/

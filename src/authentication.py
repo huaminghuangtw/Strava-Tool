@@ -7,9 +7,9 @@ def get_New_Access_Tokens():
     auth_url = "https://www.strava.com/oauth/token"
 
     payload = {
-        'client_id': client_ID,
-        'client_secret': client_secret,
-        'refresh_token': "92100886064939bc80039961f98833b8456f16c1",
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'refresh_token': REFRESH_TOKEN,
         'grant_type': "refresh_token",
         'f': 'json'
     }

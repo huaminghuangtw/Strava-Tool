@@ -30,6 +30,16 @@ def main():
     Since access tokens expire after 5 hours and you don’t want to have to do all the manual work (step 1&2) all over again.
     So, We first makes a call using the refresh token to retrieve the the most recent access token to ensure your program will always run!
     """
+    print(r"""
+         _______..___________..______           ___   ____    ____  ___           ___      .__   __.      ___       __      ____    ____  _______. __       _______..___________.  ______     ______    __      
+        /       ||           ||   _  \         /   \  \   \  /   / /   \         /   \     |  \ |  |     /   \     |  |     \   \  /   / /       ||  |     /       ||           | /  __  \   /  __  \  |  |     
+       |   (----``---|  |----`|  |_)  |       /  ^  \  \   \/   / /  ^  \       /  ^  \    |   \|  |    /  ^  \    |  |      \   \/   / |   (----`|  |    |   (----``---|  |----`|  |  |  | |  |  |  | |  |     
+        \   \        |  |     |      /       /  /_\  \  \      / /  /_\  \     /  /_\  \   |  . `  |   /  /_\  \   |  |       \_    _/   \   \    |  |     \   \        |  |     |  |  |  | |  |  |  | |  |     
+    .----)   |       |  |     |  |\  \----. /  _____  \  \    / /  _____  \   /  _____  \  |  |\   |  /  _____  \  |  `----.    |  | .----)   |   |  | .----)   |       |  |     |  `--'  | |  `--'  | |  `----.
+    |_______/        |__|     | _| `._____|/__/     \__\  \__/ /__/     \__\ /__/     \__\ |__| \__| /__/     \__\ |_______|    |__| |_______/    |__| |_______/        |__|      \______/   \______/  |_______|
+
+	""")
+
     new_access_token = get_New_Access_Tokens()
 
     ## Getting activity data from Strava
@@ -37,9 +47,9 @@ def main():
     #my_dataset = get_All_Activity_Data(new_access_token)
     #my_dataset = get_Timeinterval_Activity_Data(new_access_token, "1546300799", "1514764800")
 
-
+	
     print( json.dumps(my_dataset, indent=4, sort_keys=True) ) # pretty printing a json file
-
+	
 
     # ============================================
     # Data Manipulation & Analysis & Visualization
