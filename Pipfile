@@ -12,6 +12,7 @@ matplotlib = "*"
 selenium = "*"
 pyautogui = "*"
 pyperclip = "*"
+alive-progress = "*"
 
 [dev-packages]
 

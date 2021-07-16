@@ -14,6 +14,7 @@ def get_New_Access_Tokens():
         'f': 'json'
     }
 
+    print()
     print("Requesting new Access Token...\n")
     res = requests.post(auth_url, data=payload, verify=False)
 

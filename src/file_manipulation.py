@@ -8,17 +8,20 @@ zwift_activity_dir = r"C:\Users\USER\Documents\Zwift\Activities"
 
 def move_To_Uploaded_Activities_Folder(filename: str):
     source = os.path.join(zwift_activity_dir, "FixedActivities", filename)
-    dest = os.path.join(zwift_activity_dir, "UploadedActivities")
+    dest_dir = os.path.join(zwift_activity_dir, "UploadedActivities")
+    dest = os.path.join(dest_dir, os.path.basename(source))
     shutil.move(source, dest)
 
 def move_To_Fixed_Activities_Folder(filename: str):
     source = os.path.join(downloads_path, filename)
-    dest = os.path.join(zwift_activity_dir, "FixedActivities")
+    dest_dir = os.path.join(zwift_activity_dir, "FixedActivities")
+    dest = os.path.join(dest_dir, os.path.basename(source))
     shutil.move(source, dest)
 
 def move_To_Original_Activities_Folder(filename: str):
     source = os.path.join(zwift_activity_dir, filename)
-    dest = os.path.join(zwift_activity_dir, "OriginalActivities")
+    dest_dir = os.path.join(zwift_activity_dir, "OriginalActivities")
+    dest = os.path.join(dest_dir, os.path.basename(source))
     shutil.move(source, dest)
 
 def rename_FitFile(newfilename: str, fitfilename: str = "fitfiletools.fit"):
