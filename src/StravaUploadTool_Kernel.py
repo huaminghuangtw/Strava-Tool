@@ -19,6 +19,8 @@ def upload_Fit_Activity_Files(access_token: str):
     os.chdir(os.path.join(zwift_activity_dir, "FixedActivities"))
     fitfile_list = glob.glob("*.fit")
 
+    print("Start uploading activity files...\n")
+
     with alive_bar(len(fitfile_list), title='Uploading FIT activity files', bar="blocks") as bar:
         for fitfile in fitfile_list:
             with open(fitfile, 'rb') as fit_file:
@@ -28,37 +30,16 @@ def upload_Fit_Activity_Files(access_token: str):
                                   headers=header,
                                   files=f)
 
-                print("Uploading " + fitfile + "...")                
+                print("Uploading " + fitfile + "...")    
+                time.sleep(0.05)        
                 
                 upload_ID = r.json().get('id_str')
                 while (True):
                     # polling the upload status per second
                     wait(1)
                     
-                    # THIS BLOCK WILL RAISE TYPEERROR (i.e., upload_ID is NoneType) - I don't know why exactly....
-                    # uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
-                    # header = {'Authorization': 'Bearer ' + access_token}
-                    
-                    # r = requests.get(uploads_url, headers=header)
-                    
-                    # error = r.json().get('error')
-                    # status = r.json().get('status')
-                    # activity_id = r.json().get('activity_id')
-
-                    # if (error is None) and (activity_id is None):  # Possibility 1: Your activity is still being processed.
-                        # print(status + '.. ' + filename)
-                    # elif (error):                                  # Possibility 2: There was an error processing your activity. (check for malformed data and duplicates)
-                        # print(status + '.. ' + filename)
-                        # print("ERROR - " + error)
-                        # print("\n")
-                        # break
-                    # elif (activity_id is not None):                # Possibility 3: Your activity is ready.
-                        # print(status + ' ( ' + filename + ' )')
-                        # print("\n")
-                        # fitfile.close()
-                        # move_To_Uploaded_Activities_Folder(filename)
-                        # break
                     isError, activity_id = check_Upload_Status(access_token, fitfile, upload_ID)
+                    time.sleep(0.05)
                                                                 
                     if (isError):                     # There is an error uploading activity file.
                         # update progress bar

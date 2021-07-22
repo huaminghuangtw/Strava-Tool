@@ -25,12 +25,13 @@ Hopefully it could be someday extended to have some advanced features like Golde
 
 ## Features (__just name a few, not completed yet__)
 - uploading workout (Ride, Virtual Ride, Run, Hike, etc.) activity files with the help of batch script automation using Task Scheduler (Windows)
-  ![upload](https://user-images.githubusercontent.com/43208378/119350059-287c7880-bc9f-11eb-8b87-05869506b9bd.png)
+  ![demo1](/figures&videos/demo1.mp4)
+  ![demo2](/figures&videos/demo2.mp4)
 - analyzing workout data using Pandas package  
   e.g.,
     - yearly summary (similar to [Strava Year in Sport Data Report](https://blog.strava.com/press/yis2020/))  
     - How many workout activities I did per month/week in a year?  
-      ![2018summary](/figures/Number_of_activities_per_month_in_2018.png)
+      ![2018summary](/figures&videos/Number_of_activities_per_month_in_2018.png)
     - How much time I spent on cycling activities per month/week in a year?
     - etc.
 - visualizing workout data using Seaborn and Matplotlib libraries as well as Tableau software   

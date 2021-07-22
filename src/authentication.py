@@ -21,7 +21,7 @@ def get_New_Access_Tokens():
     access_token = res.json()['access_token']
     refresh_token = res.json()['refresh_token']
 
-    print("Access Token = {}".format(access_token))
-    print("Refresh Token = {}\n".format(refresh_token))
+    #print("Access Token = {}".format(access_token))
+    #print("Refresh Token = {}\n".format(refresh_token))
 
     return access_token
