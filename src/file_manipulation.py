@@ -1,9 +1,11 @@
-import os, shutil
+import os, shutil, yaml
 from pathlib import Path
 
 
+config = yaml.safe_load(open("../configfile/user_config.yml"))
+
 downloads_path = str( os.path.join(Path.home(), "Downloads") )
-zwift_activity_dir = r"C:\Users\USER\Documents\Zwift\Activities"
+zwift_activity_dir = config["zwift_activity_dir"]
 
 
 def move_To_Uploaded_Activities_Folder(filename: str):

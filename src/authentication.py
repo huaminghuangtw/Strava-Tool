@@ -1,6 +1,12 @@
-from client_configuration_file import *
-import requests, urllib3
+import requests, urllib3, yaml
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+
+config = yaml.safe_load(open("../configfile/user_config.yml"))
+
+CLIENT_ID = config["CLIENT_ID"]
+CLIENT_SECRET = config["CLIENT_SECRET"]
+REFRESH_TOKEN = config["REFRESH_TOKEN"]
 
 
 def get_New_Access_Tokens():

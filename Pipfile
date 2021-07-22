@@ -13,6 +13,7 @@ selenium = "*"
 pyautogui = "*"
 pyperclip = "*"
 alive-progress = "*"
+pyyaml = "*"
 
 [dev-packages]
 
