@@ -2,7 +2,11 @@ import os, shutil, yaml
 from pathlib import Path
 
 
-config = yaml.safe_load(open("../configfile/user_config.yml"))
+dir = os.path.dirname(__file__)
+CONFIG_FILE_PATH = os.path.abspath( os.path.join(dir, '..', 'configfile', 'user_config.yml') )
+with open(CONFIG_FILE_PATH, 'r') as f:
+    config = yaml.safe_load(f)
+    
 
 downloads_path = str( os.path.join(Path.home(), "Downloads") )
 zwift_activity_dir = config["zwift_activity_dir"]
