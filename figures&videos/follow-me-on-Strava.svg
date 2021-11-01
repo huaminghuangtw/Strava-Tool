@@ -1,0 +1,37 @@
+<svg fill="none" viewBox="0 0 160 29" width="160" height="29" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">
+            <style>
+                @keyframes rotate {
+					0% {
+						transform: rotate(3deg);
+					}
+					100% {
+						transform: rotate(-3deg);
+					}
+				}
+                a {
+                    display: inline-block;
+                    background-color: #FC5200;
+                    color: #fff;
+                    padding: 8px 10px 8px 30px;
+                    margin: 0;
+                    border-radius: 3px;
+                    font-size: 11px;
+                    font-family: Helvetica, Arial, sans-serif;
+                    white-space: nowrap;
+                    text-decoration: none;
+                    background-repeat: no-repeat;
+                    background-position: 10px center;
+                    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAATCAYAAACgADyUAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAUdEVYdENyZWF0aW9uIFRpbWUANi80LzE0kRMgQQAAAN1JREFUOI2VkbENAjEMRb/p6GCDk1iAhhKJil2YgYYBGOJaVqDhJEpuBcQGiI7yUeCgEHwHuIkc/+cXKVJQwAYYdcwEhIOKZ23+BWsHb5E1BDMbXdYusC7AG1D1gsCUuOpvYJOFLwVchSCwKIPAIbKWYFOGgmXTNzCyZdtza1OCH7ae71kk2Mp/8sFE0srbnZmd/H4taSypHUSgmZ0ltd4uHZo5JEn7EExDP8cOLb1vJV07QTO7Jqs/9WWTpD7jKwRsk80X9oMeOnp7z57/1Zisd0nHZPu5gDkwzHo9ADWCdl4uXrJLAAAAAElFTkSuQmCC');
+                    display: block;
+                    animation: rotate ease-in-out 1s infinite alternate;
+                }
+            </style>
+            <a>
+                Follow me on
+                <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAANCAYAAAAE0Vb3AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNui8sowAAAAUdEVYdENyZWF0aW9uIFRpbWUANi80LzE0kRMgQQAAAoZJREFUSIndll9ojXEYx7+vkW1NlGgrWnYu/GcaIvlzYw2llJtJCIkbblwqEq7WtrRE/pyyCKHN8jdTwy7masO2ooULuXHjz9RwzsfF+7zOc17HMTe72FNvv/f3+X2f8zzP7/09v04AaFQaUAXsBrYBi0cg3nobi4apL7axBhhj77+fwECZpNOSVkuaIAlJg5L6JJ2SVCWpOk+cl5K+SlrmY0tKSXonqTUIgnOxxGZLui2pUlKFpGuSfkp6GgTBHqerl1QjaaykXZK6LK8tQRA8yzpZwDjgIRkbItsuAnfIb2+Ajn9ommPFXDXeaPNOp11pbKFjz40dsfm9+JcRsAT4ZIIUsBOYBewALpnDdqAJOAMMugCXgZPAQaDd8W6gzhL2mzPTfm+RY0PAVGCBYx2mu+XYKqAE+BJjWcWUEu5sZGlgAGgGNuc4t++dttTxR44fd7zP8Spjd8m2pPFWxxqAH7HiGmJ+nVnFmGgF0EtuawfGm64E+ODW5vylmAHgOtBlmxOxAmB5jhgpYAaQcHpvlcAU/mwBgA3xYgqtoKXAAaAF+O4c1v5nMXHrBBKme2JsCKh3mpu23hzzbTN+wbFG4LO9d+OO2XQy5/0GsA/YS6aPINOQwy3mLPDYzVtMU50jed/4c4EysjcyAZQTfj2AHvNLOs2mqJgT5LcHQIEr5qMP7orxydcCk4Fvjh2NJT7P/NY4FvVGk82jC6jNaTYaqyDTUz1ASZRIOXDInLqBF8B9YH9UiOmKCa/gPnsSbi3p+FZjtYS92Au8BV7bel3sUjlv/BUwH5hE2GPTLOl+W78S8ztsvB84ppEywuYvGIauyMZ1Nham0+kgj17V4TgxYBT9N/sF4HNz+m6JZH4AAAAASUVORK5CYII='/>
+            </a>
+        </div>
+    </foreignObject>
+</svg>
