@@ -3,6 +3,10 @@ Strava-Tool
 
 > A personal side project with Strava API using Python. 
 
+<a href="https://www.strava.com/athletes/huaminghuang">
+    <img src="figures&videos/follow-me-on-Strava.svg">
+</a>
+
 ## Motivation
 This project is my personal side project with Strava API.
 The goal of this project is to analyze my training data for better future performance, as well as to **hone my Data Analysis & Visualization skills**.
