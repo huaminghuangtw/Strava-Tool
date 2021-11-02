@@ -7,7 +7,9 @@ Strava-Tool
     <img src="figures&videos/follow-me-on-Strava.svg">
 </a>
 
-## Motivation
+---
+
+### Motivation
 This project is my personal side project with Strava API.
 The goal of this project is to analyze my training data for better future performance, as well as to **hone my Data Analysis & Visualization skills**.
 The idea was originally coming from the fact that my increasing demands for uploading indoor cycling activity data to Strava, especially in the lockdown time of COVID-19.
@@ -27,7 +29,9 @@ Hopefully it could be someday extended to have some advanced features like Golde
   <img width="300" height="460" src="https://user-images.githubusercontent.com/43208378/114391662-0a980000-9b98-11eb-9e49-9f48a532908f.JPG">
 </p>
 
-## Features (__just name a few, not completed yet__)
+---
+
+### Features (__just name a few, not completed yet__)
 - Fixing and uploading workout (Ride, Virtual Ride, Run, Hike, etc.) activity files with the help of batch script automation using Task Scheduler (Windows)
 
 https://user-images.githubusercontent.com/43208378/126695209-51a2c492-9b8d-4668-808d-801e813fe502.mp4
@@ -46,16 +50,39 @@ https://user-images.githubusercontent.com/43208378/126695221-0dcaaa7f-4b31-4093-
     - heatmap
     - etc.
 
-## How to use the code
+---
+
+### How to use the code
 * [ ] Pipenv
 * [ ] https://selenium-python.readthedocs.io/installation.html#drivers
 * [ ] batch file
 * [ ] auth
 * [ ] config
 
-## Good resources
+---
+
+### Good resources
 - Getting started with Strava API:
   - [Getting Started With The Strava API: A Tutorial](https://medium.com/@annthurium/getting-started-with-the-strava-api-a-tutorial-f3909496cd2d)
   - [YouTube Playlist "Strava API for Beginners", by Fran Polignano](https://www.youtube.com/playlist?list=PLO6KswO64zVvcRyk0G0MAzh5oKMLb6rTW)
 - Further development ideas: [Strava Labs](https://labs.strava.com/)
 - [Strava API Developer Forum](https://groups.google.com/g/strava-api)
+
+---
+
+### Support the project
+Whether you use this project, have learned something from it, or just like it, please consider supporting it by buying me a coffee or making one-time donations via PayPal, so I can dedicate more time on open-source projects like this. 💪🙃
+
+<a href="https://www.buymeacoffee.com/huaming.huang" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="30" width="127" />
+</a>
+<a href="https://www.paypal.me/huaminghuang" target="_blank">
+    <img src="https://ionicabizau.github.io/badges/paypal.svg" alt="paypal.me/huaminghuang" height="30" width="127" />
+</a>
+
+Thanks!:heart: and Cheers!:beers:
+
+---
+
+### Contact
+If you have any question or suggestion, feel free to contact me at huaming.huang.tw@gmail.com. Contributions are also welcomed. Please open a [pull-request](https://github.com/hmhuang0501/Strava-Tool/compare) or an [issue](https://github.com/hmhuang0501/Strava-Tool/issues/new) in this repository.
