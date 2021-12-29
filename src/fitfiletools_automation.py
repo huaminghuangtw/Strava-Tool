@@ -38,8 +38,8 @@ def fix_Fit_Activity_Files():
                 
                 path_to_fitfile = os.path.join(zwift_activity_dir, fitfile)
                 
-                # check if the size of the fit file is larger than 10KB
-                if (os.path.getsize(path_to_fitfile) < 10000):
+                # check if the size of the fit file is smaller than 10KB or the file name is 'inProgressActivity.fit'
+                if (os.path.getsize(path_to_fitfile) < 10000) or (fitfile == 'inProgressActivity.fit'):
                     move_To_Original_Activities_Folder(fitfile)
                     
                     # update progress bar
