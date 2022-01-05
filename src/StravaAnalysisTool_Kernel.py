@@ -19,11 +19,15 @@ def get_Latest_Activity_Data(access_token: str, numberOfActivities: str) -> list
     Arguments:
         numberOfActivities: number of the latest activities you want to retrieve from your Strava feed.
     """
-    activites_url = "https://www.strava.com/api/v3/athlete/activities"
-    header = {'Authorization': 'Bearer ' + access_token}
-    param = {'per_page': numberOfActivities, 'page': 1}
+    try:
+        activites_url = "https://www.strava.com/api/v3/athlete/activities"
+        header = {'Authorization': 'Bearer ' + access_token}
+        param = {'per_page': numberOfActivities, 'page': 1}
+        r = requests.get(activites_url, headers=header, params=param)
+    except requests.RequestException:
+        return None
 
-    my_dataset = requests.get(activites_url, headers=header, params=param).json()
+    my_dataset = r.json()
 
     return my_dataset
 
@@ -40,11 +44,15 @@ def get_Timeinterval_Activity_Data(access_token: str, before: str, after: str) -
 
     while True:
         # get page of activities from Strava
-        activites_url = "https://www.strava.com/api/v3/athlete/activities"
-        header = {'Authorization': 'Bearer ' + access_token}
-        param = {'before': before, 'after': after, 'per_page': per_page, 'page': page_id}
-
-        dataset = requests.get(activites_url, headers=header, params=param).json()
+        try:
+            activites_url = "https://www.strava.com/api/v3/athlete/activities"
+            header = {'Authorization': 'Bearer ' + access_token}
+            param = {'before': before, 'after': after, 'per_page': per_page, 'page': page_id}
+            r = requests.get(activites_url, headers=header, params=param)
+        except requests.RequestException:
+            return None
+        
+        dataset = r.json()
 
         # if no results then exit loop
         if (not dataset):
@@ -65,11 +73,15 @@ def get_All_Activity_Data(access_token: str) -> list:
 
     while True:
         # get page of activities from Strava
-        activites_url = "https://www.strava.com/api/v3/athlete/activities"
-        header = {'Authorization': 'Bearer ' + access_token}
-        param = {'per_page': per_page, 'page': page_id}
-
-        dataset = requests.get(activites_url, headers=header, params=param).json()
+        try:
+            activites_url = "https://www.strava.com/api/v3/athlete/activities"
+            header = {'Authorization': 'Bearer ' + access_token}
+            param = {'per_page': per_page, 'page': page_id}
+            r = requests.get(activites_url, headers=header, params=param)
+        except requests.RequestException:
+            return None
+        
+        dataset = r.json()
 
         # if no results then exit loop
         if (not dataset):
@@ -97,7 +109,6 @@ def _generate_Activity_Count_Plot(activity_data: pd.DataFrame, ax: mpl.axes.Axes
         ax - A set of matplotlib axes to generate the plot on.
         colour_palette - The colour palette to generate the plot with.
     """
-
     # Group the activity data by month and calculate the count of each activity type
     activity_data.index = pd.to_datetime(activity_data.index)
     data = (activity_data.groupby([activity_data.index.to_period('M'), 'type'])
@@ -127,7 +138,6 @@ def display_Activity_Count_Plot(activity_data: pd.DataFrame, colour_palette: lis
         activity_dataframe - A pandas DataFrame containing the activity data.
         colour_palette - The colour palette to generate the plot with.
     """
-
     # Get only the activity types and start dates
     activity_data = activity_data[['type', 'start_date_local']]
     activity_data = activity_data.set_index('start_date_local')
@@ -155,7 +165,6 @@ def _generate_Summary_Statistics(x: pd.Series) -> pd.Series:
             - Total and average elevation gain
             - Average speed
     """
-
     rows = {'Number of activities': x['type'].count(),
             'Total distance (km)': x['distance'].sum() / 1000,
             'Average distance (km)': x['distance'].mean() / 1000,
@@ -184,7 +193,6 @@ def display_Summary_Statistics(activity_data: pd.DataFrame):
     Arguments:
         activity_dataframe - A pandas DataFrame containing the activity data.
     """
-
     if not activity_data.empty:
         summary_statistics = activity_data.groupby('type').apply(_generate_Summary_Statistics)
         print()

@@ -12,10 +12,6 @@ from typing import Any, Tuple
 # activity uploading related functions
 # ------------------------------------
 def upload_Fit_Activity_Files(access_token: str):
-    uploads_url = "https://www.strava.com/api/v3/uploads"
-    payload = {'client_id': CLIENT_ID, 'data_type': 'fit'}
-    header = {'Authorization': 'Bearer ' + access_token}
-
     os.chdir(os.path.join(zwift_activity_dir, "FixedActivities"))
     fitfile_list = glob.glob("*.fit")
 
@@ -24,16 +20,26 @@ def upload_Fit_Activity_Files(access_token: str):
     with alive_bar(len(fitfile_list), title='Uploading FIT activity files', bar="blocks") as bar:
         for fitfile in fitfile_list:
             with open(fitfile, 'rb') as fit_file:
-                f = {'file': fit_file}
-                r = requests.post(uploads_url,
-                                  data=payload,
-                                  headers=header,
-                                  files=f)
+                try:
+                    uploads_url = "https://www.strava.com/api/v3/uploads"
+                    payload = {'client_id': CLIENT_ID, 'data_type': 'fit'}
+                    header = {'Authorization': 'Bearer ' + access_token}
+                    f = {'file': fit_file}
+                    r = requests.post(uploads_url,
+                                      data=payload,
+                                      headers=header,
+                                      files=f)
+                except requests.RequestException:
+                    return None
 
                 print("Uploading " + fitfile + "...")    
                 time.sleep(0.05)        
                 
-                upload_ID = r.json().get('id_str')
+                try:
+                    upload_ID = r.json().get('id_str')
+                except (KeyError, TypeError, ValueError):
+                    return None
+                    
                 while (True):
                     # polling the upload status per second
                     wait(1)
@@ -58,14 +64,19 @@ def upload_Fit_Activity_Files(access_token: str):
 
 
 def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tuple[bool, Any]:
-    uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
-    header = {'Authorization': 'Bearer ' + access_token}
+    try:
+        uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
+        header = {'Authorization': 'Bearer ' + access_token}
+        r = requests.get(uploads_url, headers=header)
+    except requests.RequestException:
+        return None
     
-    r = requests.get(uploads_url, headers=header)
-    
-    error = r.json().get('error')
-    status = r.json().get('status')
-    activity_id = r.json().get('activity_id')
+    try:
+        error = r.json().get('error')
+        status = r.json().get('status')
+        activity_id = r.json().get('activity_id')
+    except (KeyError, TypeError, ValueError):
+        return None
 
     if (error is None) and (activity_id is None):  # Possibility 1: Your activity is still being processed.
         print(status + '.. ' + filename)
