@@ -3,9 +3,23 @@ from file_manipulation import *
 from alive_progress import alive_bar
 import requests, urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-import os, glob, time
+import os, subprocess, glob, time
 from typing import Any, Tuple
 
+
+
+# --------------------------
+# function to kill a process
+# --------------------------
+def kill_process(process_name: str):
+    # print(subprocess.getoutput('tasklist'))
+    process_list = subprocess.Popen('tasklist', stdout=subprocess.PIPE).communicate()[0]
+    if process_name.encode() in process_list:
+        os.system("taskkill /im " + process_name + " /f") # Or: subprocess.call("taskkill /f /im " + process_name)
+        print("Successfully kill the running process: " + process_name)
+    else:
+        print("Error: " + process_name + " is not running\n" + "Aborting...")
+        raise SystemExit(0)
 
 
 # ------------------------------------
@@ -86,7 +100,7 @@ def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tup
         print("ERROR - " + error + '\n')
         return (True, activity_id)
     else:                                          # Possibility 3: Your activity is ready.
-        print(status + ' ( ' + filename + ' )' + '\n')
+        print(status + ' (' + filename + ')' + '\n')
         return (False, activity_id)
 
 

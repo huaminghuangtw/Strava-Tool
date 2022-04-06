@@ -18,7 +18,7 @@ from StravaAnalysisTool_Kernel import *
 #
 # https://www.strava.com/api/v3/athlete/activities?access_token=access_token_from_previous_step
 #
-# 3) Use refresh token to get new access tokens (i.e., getNewAccessTokens())
+# 4) Use refresh token to get new access tokens (i.e., getNewAccessTokens())
 #
 # https://www.strava.com/oauth/token?client_id=your_client_id&client_secret=your_client_secret&refresh_token=your_refresh_token_from_previous_step&grant_type=refresh_token
 #
@@ -27,7 +27,7 @@ from StravaAnalysisTool_Kernel import *
 
 def main():
     """
-    Since access tokens expire after 5 hours and you don’t want to have to do all the manual work (step 1&2) all over again.
+    Since access tokens expire after 5 hours and you don't want to have to do all the manual work (step 1&2) all over again.
     So, We first makes a call using the refresh token to retrieve the the most recent access token to ensure your program will always run!
     """
     print(r"""
