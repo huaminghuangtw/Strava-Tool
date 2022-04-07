@@ -13,11 +13,11 @@ from typing import Any
 
 
 def fix_Fit_Activity_Files():
-    os.chdir(zwift_activity_dir)
+    os.chdir(ZWIFT_ACTIVITY_DIR)
     fitfile_list = glob.glob("*.fit")
 
     if not fitfile_list:
-        sys.exit("Nothing to fix and upload to Strava.\nAborting...")
+        sys.exit("No .fit file(s) to fix and upload to Strava.\nAborting...")
     else:
         with alive_bar(1, title='Opening the webpage of FIT File Tools', bar="blocks", spinner="classic") as bar:
             dir = os.path.dirname(__file__)
@@ -36,7 +36,7 @@ def fix_Fit_Activity_Files():
         with alive_bar(len(fitfile_list), title='Fixing FIT activity files', bar="blocks") as bar:
             for fitfile in fitfile_list:
                 
-                path_to_fitfile = os.path.join(zwift_activity_dir, fitfile)
+                path_to_fitfile = os.path.join(ZWIFT_ACTIVITY_DIR, fitfile)
                 
                 # check if the size of the fit file is smaller than 10KB or the file name is 'inProgressActivity.fit'
                 if (os.path.getsize(path_to_fitfile) < 10000) or (fitfile == 'inProgressActivity.fit'):
@@ -128,8 +128,8 @@ def fix_Fit_Activity_Files():
                         )
                         element.click()
                         time.sleep(3)
-                        pyautogui.press('return')
-                        time.sleep(3)
+                        # pyautogui.press('return')
+                        # time.sleep(3)
                         
                         # update progress bar
                         bar()
@@ -145,7 +145,7 @@ def fix_Fit_Activity_Files():
                         rename_FitFile(newfilename)
                         move_To_Fixed_Activities_Folder(newfilename)
 
-                        # Step 11: move the original fit file in zwift_activity_dir to OriginalActivities folder
+                        # Step 11: move the original fit file in ZWIFT_ACTIVITY_DIR to OriginalActivities folder
                         move_To_Original_Activities_Folder(fitfile)
 
                     except TimeoutException:

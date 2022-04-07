@@ -31,7 +31,7 @@ def main():
     Since access tokens expire after 5 hours and you don't want to have to do all the manual work (step 1&2) all over again.
     So, We first makes a call using the refresh token to retrieve the the most recent access token to ensure your program will always run!
     """
-    kill_process("ZwiftApp.exe")
+    preprocessing()
     print(r"""
    _____  _                             _    _         _                    _  _______             _ 
   / ____|| |                           | |  | |       | |                  | ||__   __|           | |
