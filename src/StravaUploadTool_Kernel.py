@@ -3,9 +3,10 @@ from file_manipulation import *
 from alive_progress import alive_bar
 import requests, urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-import os, subprocess, glob, time, datetime
+import sys, os, subprocess, glob, time, datetime
 from typing import Any, Tuple
 import imaplib, email
+import re
 
 
 # --------------------------------
@@ -16,40 +17,14 @@ def preprocessing():
     process_list = subprocess.Popen('tasklist', stdout=subprocess.PIPE).communicate()[0]
     process_name = "ZwiftApp.exe"
     if process_name.encode() in process_list:
-        os.system("taskkill /im " + process_name + " /f") # Or: subprocess.call("taskkill /f /im " + process_name)
-        print("Successfully kill the running process: " + process_name)
+        exit_code = os.system("taskkill /f /im " + process_name) # Or: subprocess.call("taskkill /f /im " + process_name)
+        if (exit_code == 0):
+            print("Successfully kill the running process: " + process_name)
+        else:
+            sys.exit("Aborting...")
     else:
         # Enable less secure apps on your Google account:
         # https://myaccount.google.com/lesssecureapps
-        def downloaAttachmentsInEmail(connection, email_id, download_folder):
-            """
-            Function to download all attachment files for a given email
-            """
-            try:
-                typ, data = connection.fetch(email_id, "(BODY.PEEK[])") # use PEEK so we don't change the UNSEEN status of the email messages
-                if (typ != 'OK'):
-                    print('Error fetching email!')
-                    raise
-                email_body = data[0][1]
-                raw_emails = email.message_from_bytes(email_body)
-                # print(raw_emails)
-                for mail in raw_emails.walk():
-                    if (mail.get_content_maintype() == 'multipart'):
-                        # print(mail.as_string())
-                        continue
-                    if (mail.get('Content-Disposition') is None):
-                        # print(mail.as_string())
-                        continue
-                    fileName = mail.get_filename()
-                    if fileName.endswith('.fit'):
-                        attachment_path = os.path.join(download_folder, fileName)
-                        if not os.path.isfile(attachment_path):
-                            print('Downloading email attachment: ' + fileName + '...')
-                            f = open(attachment_path, 'wb')
-                            f.write(mail.get_payload(decode=True))
-                            f.close()
-            except:
-                print('Error downloading all attachments!')
         print(process_name + " is not running." + "\n" + "Try to find .fit file(s) from GMAIL...")
         gmail = imaplib.IMAP4_SSL("imap.gmail.com")
         typ, accountDetails = gmail.login(GMAIL_USER_ID, GMAIL_PASSWORD)
@@ -87,7 +62,7 @@ def upload_Fit_Activity_Files(access_token: str):
             with open(fitfile, 'rb') as fit_file:
                 try:
                     uploads_url = "https://www.strava.com/api/v3/uploads"
-                    payload = {'client_id': CLIENT_ID, 'data_type': 'fit'}
+                    payload = {'client_id': CLIENT_ID, 'data_type': 'fit', 'trainer': 'Elite Turbo Muin Smart B+'}
                     header = {'Authorization': 'Bearer ' + access_token}
                     f = {'file': fit_file}
                     r = requests.post(uploads_url,
@@ -111,20 +86,16 @@ def upload_Fit_Activity_Files(access_token: str):
                     
                     isError, activity_id = check_Upload_Status(access_token, fitfile, upload_ID)
                     time.sleep(0.05)
-                                                                
-                    if (isError):                     # There is an error uploading activity file.
+                    
+                    # If there is an error uploading activity file or
+                    # it's been successfully uploaded to Strava
+                    if (isError) or (activity_id is not None):
+                        fit_file.close()
+                        move_To_Uploaded_Or_Malformed_Activities_Folder(fitfile)
+
                         # update progress bar
                         bar()
                     
-                        break
-
-                    if (activity_id is not None):     # Successfully uploading activity file to Strava!
-                        fit_file.close()
-                        move_To_Uploaded_Activities_Folder(fitfile)
-
-                        # update progress bar
-                        bar()
-
                         break
                 print("")
 
@@ -138,23 +109,59 @@ def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tup
         return None
     
     try:
-        error = r.json().get('error')
+        error_msg = r.json().get('error')
         status = r.json().get('status')
         activity_id = r.json().get('activity_id')
     except (KeyError, TypeError, ValueError):
         return None
 
-    if (error is None) and (activity_id is None):  # Possibility 1: Your activity is still being processed.
+    if (error_msg is None) and (activity_id is None):  # Possibility 1: Your activity is still being processed.
         print(status + '.. ' + filename)
         return (False, activity_id)
-    elif (error):                                  # Possibility 2: There was an error processing your activity. (check for malformed data and duplicates)
+    elif (error_msg):                                  # Possibility 2: There was an error processing your activity. (check for malformed data and duplicates)
         print(status + '.. ' + filename)
-        print("ERROR - " + error + '\n')
+        print("Reason: " + error_msg + '\n')
+        if findWholeWord('malformed')(error_msg):
+            print("Please check this file in the 'UploadedOrMalformedActivities' folder!\n")
         return (True, activity_id)
     else:                                          # Possibility 3: Your activity is ready.
         print(status + ' (' + filename + ')' + '\n')
         return (False, activity_id)
 
 
+# Helper functions
 def wait(poll_interval: float):
     time.sleep(poll_interval)
+
+def findWholeWord(w):
+    return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
+
+def downloaAttachmentsInEmail(connection, email_id, download_folder):
+    """
+    Function to download all attachment files for a given email
+    """
+    try:
+        typ, data = connection.fetch(email_id, "(BODY.PEEK[])") # use PEEK so we don't change the UNSEEN status of the email messages
+        if (typ != 'OK'):
+            print('Error fetching email!')
+            raise
+        email_body = data[0][1]
+        raw_emails = email.message_from_bytes(email_body)
+        # print(raw_emails)
+        for mail in raw_emails.walk():
+            if (mail.get_content_maintype() == 'multipart'):
+                # print(mail.as_string())
+                continue
+            if (mail.get('Content-Disposition') is None):
+                # print(mail.as_string())
+                continue
+            fileName = mail.get_filename()
+            if fileName.endswith('.fit'):
+                attachment_path = os.path.join(download_folder, fileName)
+                if not os.path.isfile(attachment_path):
+                    print('Downloading email attachment: ' + fileName + '...')
+                    f = open(attachment_path, 'wb')
+                    f.write(mail.get_payload(decode=True))
+                    f.close()
+    except:
+        print('Error downloading all attachments!')

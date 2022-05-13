@@ -3,11 +3,11 @@ from pathlib import Path
 from read_config_file import *
 
 
-def move_To_Uploaded_Activities_Folder(filename: str):
+def move_To_Uploaded_Or_Malformed_Activities_Folder(filename: str):
     source_dir = os.path.join(ZWIFT_ACTIVITY_DIR, "FixedActivities")
     if not os.path.exists(source_dir):
         os.makedirs(source_dir)
-    dest_dir = os.path.join(ZWIFT_ACTIVITY_DIR, "UploadedActivities")
+    dest_dir = os.path.join(ZWIFT_ACTIVITY_DIR, "UploadedOrMalformedActivities")
     if not os.path.exists(dest_dir):
         os.makedirs(dest_dir)
     source = os.path.join(source_dir, filename)

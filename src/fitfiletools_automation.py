@@ -15,10 +15,15 @@ from typing import Any
 def fix_Fit_Activity_Files():
     os.chdir(ZWIFT_ACTIVITY_DIR)
     fitfile_list = glob.glob("*.fit")
-
+    if ('inProgressActivity.fit' in fitfile_list):
+        fitfile_list.remove('inProgressActivity.fit')
     if not fitfile_list:
-        sys.exit("No .fit file(s) to fix and upload to Strava.\nAborting...")
+        sys.exit("\nNo .fit file(s) to be fixed and uploaded to Strava.\nAborting...")
     else:
+        print('\nWorkout data found: ', end="")
+        for f in fitfile_list:
+            print('\n\t' + f, end="")
+        print('\n')
         with alive_bar(1, title='Opening the webpage of FIT File Tools', bar="blocks", spinner="classic") as bar:
             dir = os.path.dirname(__file__)
             WEB_DRIVER_PATH = os.path.abspath( os.path.join(dir, '..', 'webdriver', 'geckodriver.exe') )
@@ -38,8 +43,8 @@ def fix_Fit_Activity_Files():
                 
                 path_to_fitfile = os.path.join(ZWIFT_ACTIVITY_DIR, fitfile)
                 
-                # check if the size of the fit file is smaller than 10KB or the file name is 'inProgressActivity.fit'
-                if (os.path.getsize(path_to_fitfile) < 10000) or (fitfile == 'inProgressActivity.fit'):
+                # check if the size of the fit file is smaller than 10KB
+                if (os.path.getsize(path_to_fitfile) < 10000):
                     move_To_Original_Activities_Folder(fitfile)
                     
                     # update progress bar
@@ -76,7 +81,7 @@ def fix_Fit_Activity_Files():
 
                         # convert time from 24-hour clock format to 12-hour clock format
                         hours = int(fit_filename[3])
-                        if hours > 12:
+                        if (hours > 12):
                             afternoon = True
                             hours -= 12
                         else:
