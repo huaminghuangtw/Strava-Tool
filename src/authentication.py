@@ -13,7 +13,7 @@ from read_config_file import *
 client = Client()
 
 
-def get_access_token(file_path: pathlib.Path) -> str:
+def get_access_token(file_path: pathlib.Path = pathlib.Path('../tokens.txt')) -> str:
     """
     Obtain and return an OAuth2 access token for the Strava V3 API
     @params:
@@ -50,14 +50,15 @@ def get_access_token(file_path: pathlib.Path) -> str:
 # ----------------
 def _read_tokens_from_file(file_path: pathlib.Path) -> dict:
     """
-    Read the authentication tokens and expiry time from a text file and return them as a dictionary
+    Read the authentication tokens and expiry time from a text file
+    and return them as a dictionary
     @params:
-        file_path - The path of the file to read the tokens from.
+        file_path - The path of the file to read the tokens from
     @return:
         A dictionary containing the authentication tokens and expiry time
         An empty dictionary if the file cannot be read from successfully
     """
-    print("[Strava]: Reading authentication tokens from '{}'...".format(file_path))
+    print("[Strava]: Reading authentication tokens from '{}'".format(file_path))
 
     tokens = {}
 
@@ -85,8 +86,8 @@ def _write_tokens_to_file(file_path: pathlib.Path, tokens: dict):
         file_path - The path of the file to write the tokens to
         tokens - A dictionary containing the authentication tokens and expiry time to write to the file
     """
-    print("[Strava]: Writing authentication tokens to '{}'...".format(file_path))
-
+    print("[Strava]: Writing authentication tokens to '{}'".format(file_path))
+    
     # Delete the tokens file to remove any expired tokens
     try:
         file_path.unlink()

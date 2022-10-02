@@ -1,6 +1,7 @@
 TODOs.txt
+tokens.txt
 __pycache__/
 .idea/
 .vscode/
-configfile/
+.env
 logfile/

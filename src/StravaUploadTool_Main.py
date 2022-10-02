@@ -43,8 +43,7 @@ def main():
     """)
     preprocessing()
     fix_Fit_Activity_Files()
-    TOKEN_FILE_PATH = Path('../credentials/tokens.txt')
-    access_token = get_access_token(TOKEN_FILE_PATH)
+    access_token = get_access_token()
     upload_Fit_Activity_Files(access_token)
 
 

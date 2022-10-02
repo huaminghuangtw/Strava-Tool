@@ -162,7 +162,7 @@ def fix_Fit_Activity_Files():
                         print("ERROR - Cannot find the element!")
                         driver.quit()
 
-        # Step 12: finally, close the browser window and change back to the original working directory
+        # Step 12: finally, close the web browser window and change back to the original working directory
         driver.quit()
         os.chdir(owd)
 

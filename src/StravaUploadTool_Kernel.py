@@ -62,8 +62,8 @@ def upload_Fit_Activity_Files(access_token: str):
             with open(fitfile, 'rb') as fit_file:
                 try:
                     uploads_url = "https://www.strava.com/api/v3/uploads"
-                    payload = { 'client_id': STRAVA_CLIENT_ID,
-                                'data_type': 'fit' }
+                    payload = {'client_id': STRAVA_CLIENT_ID,
+                               'data_type': 'fit'}
                     header = {'Authorization': 'Bearer ' + access_token}
                     f = {'file': fit_file}
                     r = requests.post(uploads_url,
@@ -81,11 +81,11 @@ def upload_Fit_Activity_Files(access_token: str):
                 except (KeyError, TypeError, ValueError):
                     return None
                     
-                while (True):
+                while True:
                     # polling the upload status per semaild
                     wait(1)
                     
-                    isError, activity_id = check_Upload_Status(access_token, fitfile, upload_ID)
+                    isError, activity_id = check_Upload_Status(access_token, upload_ID)
                     time.sleep(0.05)
                     
                     # If there is an error uploading activity file or
@@ -104,7 +104,7 @@ def upload_Fit_Activity_Files(access_token: str):
                 print("")
 
 
-def check_Upload_Status(access_token: str, filename: str, upload_ID: str) -> Tuple[bool, Any]:
+def check_Upload_Status(access_token: str, upload_ID: str) -> Tuple[bool, Any]:
     try:
         uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
         header = {'Authorization': 'Bearer ' + access_token}

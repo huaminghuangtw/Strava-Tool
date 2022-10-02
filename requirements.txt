@@ -1,6 +1,5 @@
 Flask
 line-bot-sdk
-pyyaml
 stravalib
 requests
 pandas
@@ -10,6 +9,6 @@ selenium
 pyautogui
 pyperclip
 alive-progress
+python-dotenv
 gunicorn
 psycopg2
-
