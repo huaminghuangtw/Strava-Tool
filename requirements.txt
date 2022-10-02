@@ -1,0 +1,15 @@
+Flask
+line-bot-sdk
+pyyaml
+stravalib
+requests
+pandas
+seaborn
+matplotlib
+selenium
+pyautogui
+pyperclip
+alive-progress
+gunicorn
+psycopg2
+

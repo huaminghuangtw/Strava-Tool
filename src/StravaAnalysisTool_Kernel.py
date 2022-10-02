@@ -24,7 +24,7 @@ def get_Latest_Activity_Data(access_token: str, numberOfActivities: str) -> list
         header = {'Authorization': 'Bearer ' + access_token}
         param = {'per_page': numberOfActivities, 'page': 1}
         r = requests.get(activites_url, headers=header, params=param)
-    except requests.RequestException:
+    except requests.exceptions.RequestException:
         return None
 
     my_dataset = r.json()
@@ -49,7 +49,7 @@ def get_Timeinterval_Activity_Data(access_token: str, before: str, after: str) -
             header = {'Authorization': 'Bearer ' + access_token}
             param = {'before': before, 'after': after, 'per_page': per_page, 'page': page_id}
             r = requests.get(activites_url, headers=header, params=param)
-        except requests.RequestException:
+        except requests.exceptions.RequestException:
             return None
         
         dataset = r.json()
@@ -78,7 +78,7 @@ def get_All_Activity_Data(access_token: str) -> list:
             header = {'Authorization': 'Bearer ' + access_token}
             param = {'per_page': per_page, 'page': page_id}
             r = requests.get(activites_url, headers=header, params=param)
-        except requests.RequestException:
+        except requests.exceptions.RequestException:
             return None
         
         dataset = r.json()

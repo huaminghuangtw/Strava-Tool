@@ -14,6 +14,7 @@ def move_To_Uploaded_Or_Malformed_Activities_Folder(filename: str):
     dest = os.path.join(dest_dir, filename)
     shutil.move(source, dest)
 
+
 def move_To_Fixed_Activities_Folder(filename: str):
     source_dir = os.path.join(Path.home(), "Downloads")
     dest_dir = os.path.join(ZWIFT_ACTIVITY_DIR, "FixedActivities")
@@ -23,6 +24,7 @@ def move_To_Fixed_Activities_Folder(filename: str):
     dest = os.path.join(dest_dir, filename)
     shutil.move(source, dest)
 
+
 def move_To_Original_Activities_Folder(filename: str):
     dest_dir = os.path.join(ZWIFT_ACTIVITY_DIR, "OriginalActivities")
     if not os.path.exists(dest_dir):
@@ -30,6 +32,7 @@ def move_To_Original_Activities_Folder(filename: str):
     source = os.path.join(ZWIFT_ACTIVITY_DIR, filename)
     dest = os.path.join(dest_dir, filename)
     shutil.move(source, dest)
+
 
 def rename_FitFile(newfilename: str, fitfilename: str="fitfiletools.fit"):
     old_filename = os.path.join(Path.home(), "Downloads", fitfilename)

@@ -13,6 +13,7 @@ from typing import Any
 
 
 def fix_Fit_Activity_Files():
+    owd = os.getcwd()
     os.chdir(ZWIFT_ACTIVITY_DIR)
     fitfile_list = glob.glob("*.fit")
     if ('inProgressActivity.fit' in fitfile_list):
@@ -161,8 +162,9 @@ def fix_Fit_Activity_Files():
                         print("ERROR - Cannot find the element!")
                         driver.quit()
 
-        # Step 12: finally, close the browser window
+        # Step 12: finally, close the browser window and change back to the original working directory
         driver.quit()
+        os.chdir(owd)
 
 
 def finish_file_selection(element: Any):
