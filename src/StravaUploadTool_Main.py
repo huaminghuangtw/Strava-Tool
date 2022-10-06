@@ -43,7 +43,7 @@ def main():
     """)
     preprocessing()
     fix_Fit_Activity_Files()
-    access_token = get_access_token()
+    access_token = get_Access_Token()
     upload_Fit_Activity_Files(access_token)
 
 

@@ -12,4 +12,3 @@ def sendLINEMessage(StrvaActivityURL: str):
         line_bot_api.broadcast(TextSendMessage(text=StrvaActivityURL))
     except LineBotApiError as e:
         print("The was an error sending LINE message!")
-    return 200

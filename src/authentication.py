@@ -13,7 +13,7 @@ from read_config_file import *
 client = Client()
 
 
-def get_access_token(file_path: pathlib.Path = pathlib.Path('../tokens.txt')) -> str:
+def get_Access_Token(file_path: pathlib.Path = pathlib.Path('../tokens.txt')) -> str:
     """
     Obtain and return an OAuth2 access token for the Strava V3 API
     @params:
