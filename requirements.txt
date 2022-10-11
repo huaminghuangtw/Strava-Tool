@@ -2,6 +2,7 @@ Flask
 line-bot-sdk
 stravalib
 requests
+pyngrok
 pandas
 seaborn
 matplotlib

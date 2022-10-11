@@ -1,14 +1,16 @@
 import requests
+import os
+from pyngrok import ngrok
+from flask import Flask, request
 from authentication import *
 from sendLINEMessage import *
-from flask import Flask, request
 from StravaAnalysisTool_Kernel import *
+
 
 
 app = Flask(__name__)
 processed_activities = {}
 VERIFY_TOKEN = "STRAVA"
-HEROKU_APP_URL = "https://my-strava-webhook.herokuapp.com"
 
 
 """
@@ -21,9 +23,9 @@ def index():
         try:
             base_url = "https://www.strava.com/api/v3/push_subscriptions"
             params = {
-				'client_id': STRAVA_CLIENT_ID,
+                'client_id': STRAVA_CLIENT_ID,
                 'client_secret': STRAVA_CLIENT_SECRET
-			}
+            }
             r = requests.get(base_url, params=params)
         except requests.exceptions.RequestException:
             return None
@@ -32,9 +34,9 @@ def index():
         try:
             base_url = "https://www.strava.com/api/v3/push_subscriptions/{}".format(subscription_id)
             params = {
-				'client_id': STRAVA_CLIENT_ID,
-				'client_secret': STRAVA_CLIENT_SECRET
-			}
+                'client_id': STRAVA_CLIENT_ID,
+                'client_secret': STRAVA_CLIENT_SECRET
+            }
             requests.delete(base_url, params=params)
         except requests.exceptions.RequestException:
             return None
@@ -42,11 +44,11 @@ def index():
         try:
             base_url = "https://www.strava.com/api/v3/push_subscriptions"
             data = {
-				'client_id': STRAVA_CLIENT_ID,
-				'client_secret': STRAVA_CLIENT_SECRET,
-				'callback_url': callback_url,
-				'verify_token': VERIFY_TOKEN
-			}
+                'client_id': STRAVA_CLIENT_ID,
+                'client_secret': STRAVA_CLIENT_SECRET,
+                'callback_url': callback_url,
+                'verify_token': VERIFY_TOKEN
+            }
             requests.post(base_url, data=data)
         except requests.exceptions.RequestException:
             return None
@@ -54,7 +56,14 @@ def index():
     if existing_subscription:
         existing_subscription_id = existing_subscription[0]["id"]
         delete_subscription(existing_subscription_id)
-    create_subscription(HEROKU_APP_URL + "/webhook")
+    on_heroku = 'DYNO' in os.environ
+    if on_heroku:
+        heroku_app_url = "https://my-strava-webhook.herokuapp.com"
+        create_subscription(heroku_app_url + "/webhook")
+    else:
+        tunnels = ngrok.connect(5000)
+        ngrok_url = tunnels.public_url
+        create_subscription(ngrok_url + "/webhook")
     return ('SUCCESS', 200)
 
 
@@ -95,7 +104,7 @@ def webhook_post():
         if (latest_activity["id"] not in processed_activities):
             msg = "https://www.strava.com/activities/" + str(latest_activity["id"])
             if ((latest_activity["type"] == 'Ride') or (latest_activity["type"] == 'VirtualRide')) and \
-				(latest_activity["trainer"] == False):
+                (latest_activity["trainer"] == False):
                 athlete = get_Athlete(access_token)
                 recent_ride_totals = get_Recent_Ride_Totals(athlete['id'], access_token)
                 msg = msg + "\n\n" + \
