@@ -6,7 +6,7 @@ from StravaAnalysisTool_Kernel import *
 
 
 app = Flask(__name__)
-last_event_id = None
+processed_activities = {}
 
 
 # Validate webhook subscriptions
@@ -40,21 +40,23 @@ def webhook_post():
         access_token = get_Access_Token()
         client = Client(access_token)
         latest_activity = client.get_activity(data["object_id"])
-        global last_event_id
-        if (last_event_id is None) or \
-           (latest_activity.id != last_event_id): # Only send LINE messages once for a given activity
-            sendLINEMessage("https://www.strava.com/activities/" + str(latest_activity.id))
+        global processed_activities
+        # Only send LINE messages once for a given activity
+        if (latest_activity.id not in processed_activities):
+            msg = "https://www.strava.com/activities/" + str(latest_activity.id)
             if ((latest_activity.type == 'Ride') or (latest_activity.type == 'VirtualRide')) and \
 			   (latest_activity.trainer == False):
                 athlete = get_Athlete(access_token)
                 recent_ride_totals = get_Recent_Ride_Totals(athlete['id'], access_token)
-                sendLINEMessage("📈 Last 4 weeks:\n" +
-                                " • Distance = {:.2f} km\n".format(recent_ride_totals['distance'] / 1000) +
-                                " • Moving time = {}h {}m\n".format(recent_ride_totals['moving_time'] // 3600,
-                                                                    (recent_ride_totals['moving_time'] % 3600) // 60) +
-                                " • Elevation gain = {} m".format(round(recent_ride_totals['elevation_gain'])))
+                msg = msg + "\n\n" + \
+                    "📈 Last 4 weeks:\n" + \
+                    " • Distance = {:.2f} km\n".format(recent_ride_totals['distance'] / 1000) + \
+                    " • Moving time = {}h {}m\n".format(recent_ride_totals['moving_time'] // 3600,
+                                                       (recent_ride_totals['moving_time'] % 3600) // 60) + \
+                    " • Elevation gain = {} m".format(round(recent_ride_totals['elevation_gain']))
+            processed_activities[latest_activity.id] = True
+            sendLINEMessage(msg)
             print("LINE messages sent!")
-            last_event_id = data["object_id"]
         else:
             print("No LINE messages sent!")
         return ("ACTIVITY_CREATED", 200)
