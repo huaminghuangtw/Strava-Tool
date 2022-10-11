@@ -112,9 +112,11 @@ def _refresh_expired_tokens(client_info: dict, expired_tokens: dict) -> dict:
     """
     print('[Strava]: Refreshing expired authentication tokens...')
 
-    new_tokens = client.refresh_access_token(client_id=client_info['id'],
-                                             client_secret=client_info['secret'],
-                                             refresh_token=expired_tokens['refresh_token'])
+    new_tokens = client.refresh_access_token(
+					client_id=client_info['id'],
+					client_secret=client_info['secret'],
+					refresh_token=expired_tokens['refresh_token']
+				)
 
     return new_tokens
 
@@ -128,15 +130,19 @@ def _get_auth_code(client_info: dict) -> str:
         The authorization code as a string
     """
     try:
-        authorization_url = client.authorization_url(client_id=client_info['id'],
-                                                 redirect_uri='http://127.0.0.1:5000/authorization',
-                                                 scope=['read',
-                                                        'read_all',
-                                                        'profile:read_all',
-                                                        'profile:write',
-                                                        'activity:read',
-                                                        'activity:read_all',
-                                                        'activity:write'])
+        authorization_url = client.authorization_url(
+								client_id=client_info['id'],
+								redirect_uri='http://127.0.0.1:5000/authorization',
+								scope=[
+									'read',
+									'read_all',
+									'profile:read_all',
+									'profile:write',
+									'activity:read',
+									'activity:read_all',
+									'activity:write'
+								]
+							)
         # Prepare the authorization code GET request and open it in a web browser window
         r = requests.Request('GET', authorization_url).prepare()
         webbrowser.open(r.url)
@@ -159,9 +165,11 @@ def _exchange_tokens(client_info: dict, auth_code: str) -> dict:
     @return:
         A dictionary containing the initial authentication tokens and expiry time
     """
-    init_tokens = client.exchange_code_for_token(client_id=client_info['id'],
-                                                 client_secret=client_info['secret'],
-                                                 code=auth_code)
+    init_tokens = client.exchange_code_for_token(
+					client_id=client_info['id'],
+					client_secret=client_info['secret'],
+					code=auth_code
+				)
 
     return init_tokens
 

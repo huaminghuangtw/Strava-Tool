@@ -5,7 +5,6 @@ from pandas.io.json import json_normalize
 import seaborn as sns  # Seaborn is a data visualization library.
 import matplotlib as mpl  # Matplotlib is a data visualization library.
 import matplotlib.pyplot as plt
-import json
 import numpy as np  # Numpy will help us handle some work with arrays.
 from datetime import datetime  # Datetime will allow Python to recognize dates as dates, not strings.
 
@@ -39,12 +38,15 @@ def get_Recent_Ride_Totals(athlete_id: int, access_token: str) -> dict:
 	return recent_ride_totals
 
 
-def get_Latest_Activity_Data(access_token: str, numberOfActivities: str) -> list:
+def get_Latest_Activity_Data(access_token: str, numberOfActivities: str = 1) -> list:
     try:
-        activites_url = "https://www.strava.com/api/v3/athlete/activities"
+        base_url = "https://www.strava.com/api/v3/athlete/activities"
         header = {'Authorization': 'Bearer ' + access_token}
-        param = {'per_page': numberOfActivities, 'page': 1}
-        r = requests.get(activites_url, headers=header, params=param)
+        param = {
+			'per_page': numberOfActivities,
+			'page': 1
+		}
+        r = requests.get(base_url, headers=header, params=param)
     except requests.exceptions.RequestException:
         return None
 
@@ -68,7 +70,12 @@ def get_Timeinterval_Activity_Data(access_token: str, before: str, after: str) -
         try:
             activites_url = "https://www.strava.com/api/v3/athlete/activities"
             header = {'Authorization': 'Bearer ' + access_token}
-            param = {'before': before, 'after': after, 'per_page': per_page, 'page': page_id}
+            param = {
+				'before': before,
+				'after': after,
+				'per_page': per_page,
+				'page': page_id
+			}
             r = requests.get(activites_url, headers=header, params=param)
         except requests.exceptions.RequestException:
             return None
@@ -97,7 +104,10 @@ def get_All_Activity_Data(access_token: str) -> list:
         try:
             activites_url = "https://www.strava.com/api/v3/athlete/activities"
             header = {'Authorization': 'Bearer ' + access_token}
-            param = {'per_page': per_page, 'page': page_id}
+            param = {
+				'per_page': per_page,
+				'page': page_id
+			}
             r = requests.get(activites_url, headers=header, params=param)
         except requests.exceptions.RequestException:
             return None
@@ -135,12 +145,14 @@ def _generate_Activity_Count_Plot(activity_data: pd.DataFrame, ax: mpl.axes.Axes
             .size().to_frame('count').reset_index())
 
     # Generate and format the bar plot
-    sns.barplot(x='start_date_local',
-                y='count',
-                hue='type',
-                data=data,
-                palette=colour_palette,
-                ax=ax)
+    sns.barplot(
+		x='start_date_local',
+		y='count',
+		hue='type',
+		data=data,
+		palette=colour_palette,
+		ax=ax
+	)
     ax.set(title='Activities over time', ylabel='Number of activities', xlabel='Month')
     ax.set_xticklabels(ax.get_xticklabels(), rotation=45, horizontalalignment='right')
     ax.get_xaxis().set_minor_locator(mpl.ticker.AutoMinorLocator())
@@ -185,23 +197,26 @@ def _generate_Summary_Statistics(x: pd.Series) -> pd.Series:
             - Total and average elevation gain
             - Average speed
     """
-    rows = {'Number of activities': x['type'].count(),
-            'Total distance (km)': x['distance'].sum() / 1000,
-            'Average distance (km)': x['distance'].mean() / 1000,
-            'Total moving time (hours)': x['moving_time'].sum() / 3600,
-            'Average moving time (mins)': x['moving_time'].mean() / 60,
-            'Total elevation gain (km)': x['total_elevation_gain'].sum() / 1000,
-            'Average elevation gain (m)': x['total_elevation_gain'].mean(),
-            'Average speed (km/h)': x['average_speed'].mean() * 3.6}
+    rows = {
+		'Number of activities': x['type'].count(),
+		'Total distance (km)': x['distance'].sum() / 1000,
+		'Average distance (km)': x['distance'].mean() / 1000,
+		'Total moving time (hours)': x['moving_time'].sum() / 3600,
+		'Average moving time (mins)': x['moving_time'].mean() / 60,
+		'Total elevation gain (km)': x['total_elevation_gain'].sum() / 1000,
+		'Average elevation gain (m)': x['total_elevation_gain'].mean(),
+		'Average speed (km/h)': x['average_speed'].mean() * 3.6
+	}
 
-    series = pd.Series(rows, index=['Number of activities',
-                                    'Total distance (km)',
-                                    'Average distance (km)',
-                                    'Total moving time (hours)',
-                                    'Average moving time (mins)',
-                                    'Total elevation gain (km)',
-                                    'Average elevation gain (m)',
-                                    'Average speed (km/h)'])
+    series = pd.Series(rows, index=[
+								'Number of activities',
+								'Total distance (km)',
+								'Average distance (km)',
+								'Total moving time (hours)',
+								'Average moving time (mins)',
+								'Total elevation gain (km)',
+								'Average elevation gain (m)',
+								'Average speed (km/h)'])
 
     return series
 

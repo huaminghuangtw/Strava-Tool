@@ -1,4 +1,4 @@
-from stravalib import Client
+import requests
 from authentication import *
 from sendLINEMessage import *
 from flask import Flask, request
@@ -7,15 +7,64 @@ from StravaAnalysisTool_Kernel import *
 
 app = Flask(__name__)
 processed_activities = {}
+VERIFY_TOKEN = "STRAVA"
+HEROKU_APP_URL = "https://my-strava-webhook.herokuapp.com"
 
 
-# Validate webhook subscriptions
+"""
+Delete existing webhook subscriptions if any and
+create a new one
+"""
+@app.route('/')
+def index():
+    def view_subscription():
+        try:
+            base_url = "https://www.strava.com/api/v3/push_subscriptions"
+            params = {
+				'client_id': STRAVA_CLIENT_ID,
+                'client_secret': STRAVA_CLIENT_SECRET
+			}
+            r = requests.get(base_url, params=params)
+        except requests.exceptions.RequestException:
+            return None
+        return r.json()
+    def delete_subscription(subscription_id):
+        try:
+            base_url = "https://www.strava.com/api/v3/push_subscriptions/{}".format(subscription_id)
+            params = {
+				'client_id': STRAVA_CLIENT_ID,
+				'client_secret': STRAVA_CLIENT_SECRET
+			}
+            requests.delete(base_url, params=params)
+        except requests.exceptions.RequestException:
+            return None
+    def create_subscription(callback_url):
+        try:
+            base_url = "https://www.strava.com/api/v3/push_subscriptions"
+            data = {
+				'client_id': STRAVA_CLIENT_ID,
+				'client_secret': STRAVA_CLIENT_SECRET,
+				'callback_url': callback_url,
+				'verify_token': VERIFY_TOKEN
+			}
+            requests.post(base_url, data=data)
+        except requests.exceptions.RequestException:
+            return None
+    existing_subscription = view_subscription()
+    if existing_subscription:
+        existing_subscription_id = existing_subscription[0]["id"]
+        delete_subscription(existing_subscription_id)
+    create_subscription(HEROKU_APP_URL + "/webhook")
+    return ('SUCCESS', 200)
+
+
+"""
+Validate webhook subscriptions
+"""
 @app.get('/webhook')
 def webhook_get():
     data = request.args
     print(data)
-    # Your verify token (should be a random string)
-    VERIFY_TOKEN = "STRAVA"
     # Parse the query string parameters
     mode = data['hub.mode']
     verify_token = data['hub.verify_token']
@@ -28,7 +77,9 @@ def webhook_get():
         return ({'hub.challenge': challenge}, 200)
 
 
-# Receive webhook events
+"""
+Receive webhook events
+"""
 @app.post('/webhook')
 def webhook_post():
     print('EVENT_RECEIVED')
@@ -38,14 +89,13 @@ def webhook_post():
     # Here we send LINE messages when a new activity is created
     if (data["aspect_type"] == "create"):
         access_token = get_Access_Token()
-        client = Client(access_token)
-        latest_activity = client.get_activity(data["object_id"])
+        latest_activity = get_Latest_Activity_Data(access_token)[0]
         global processed_activities
         # Only send LINE messages once for a given activity
-        if (latest_activity.id not in processed_activities):
-            msg = "https://www.strava.com/activities/" + str(latest_activity.id)
-            if ((latest_activity.type == 'Ride') or (latest_activity.type == 'VirtualRide')) and \
-			   (latest_activity.trainer == False):
+        if (latest_activity["id"] not in processed_activities):
+            msg = "https://www.strava.com/activities/" + str(latest_activity["id"])
+            if ((latest_activity["type"] == 'Ride') or (latest_activity["type"] == 'VirtualRide')) and \
+				(latest_activity["trainer"] == False):
                 athlete = get_Athlete(access_token)
                 recent_ride_totals = get_Recent_Ride_Totals(athlete['id'], access_token)
                 msg = msg + "\n\n" + \
@@ -54,7 +104,7 @@ def webhook_post():
                     " • Moving time = {}h {}m\n".format(recent_ride_totals['moving_time'] // 3600,
                                                        (recent_ride_totals['moving_time'] % 3600) // 60) + \
                     " • Elevation gain = {} m".format(round(recent_ride_totals['elevation_gain']))
-            processed_activities[latest_activity.id] = True
+            processed_activities[latest_activity["id"]] = True
             sendLINEMessage(msg)
             print("LINE messages sent!")
         else:

@@ -61,15 +61,19 @@ def upload_Fit_Activity_Files(access_token: str):
         for fitfile in fitfile_list:
             with open(fitfile, 'rb') as fit_file:
                 try:
-                    uploads_url = "https://www.strava.com/api/v3/uploads"
-                    payload = {'client_id': STRAVA_CLIENT_ID,
-                               'data_type': 'fit'}
+                    base_url = "https://www.strava.com/api/v3/uploads"
+                    data = {
+						'client_id': STRAVA_CLIENT_ID,
+                        'data_type': 'fit'
+					}
                     header = {'Authorization': 'Bearer ' + access_token}
                     f = {'file': fit_file}
-                    r = requests.post(uploads_url,
-                                      data=payload,
-                                      headers=header,
-                                      files=f)
+                    r = requests.post(
+									base_url,
+                                    data=data,
+                                    headers=header,
+                                    files=f
+								)
                 except requests.exceptions.RequestException:
                     return None
 
@@ -106,9 +110,9 @@ def upload_Fit_Activity_Files(access_token: str):
 
 def check_Upload_Status(access_token: str, upload_ID: str) -> Tuple[bool, Any]:
     try:
-        uploads_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
+        base_url = "https://www.strava.com/api/v3/uploads/" + upload_ID
         header = {'Authorization': 'Bearer ' + access_token}
-        r = requests.get(uploads_url, headers=header)
+        r = requests.get(base_url, headers=header)
     except requests.exceptions.RequestException:
         return None
     
