@@ -1,11 +1,11 @@
 import requests
 import os
+from threading import Timer
 from pyngrok import ngrok
 from flask import Flask, request
 from authentication import *
 from sendLINEMessage import *
 from StravaAnalysisTool_Kernel import *
-
 
 
 app = Flask(__name__)
@@ -52,19 +52,23 @@ def index():
             requests.post(base_url, data=data)
         except requests.exceptions.RequestException:
             return None
+    
     existing_subscription = view_subscription()
     if existing_subscription:
         existing_subscription_id = existing_subscription[0]["id"]
         delete_subscription(existing_subscription_id)
+
     on_heroku = 'DYNO' in os.environ
     if on_heroku:
         heroku_app_url = "https://my-strava-webhook.herokuapp.com"
         create_subscription(heroku_app_url + "/webhook")
     else:
+        ngrok.kill()
         tunnels = ngrok.connect(5000)
         ngrok_url = tunnels.public_url
         create_subscription(ngrok_url + "/webhook")
-    return ('SUCCESS', 200)
+
+    return ("SUCCESS", 200)
 
 
 """
@@ -125,5 +129,17 @@ def webhook_post():
         return ("ACTIVITY_DELETED", 200)
 
 
+"""
+Open the web browser silently
+"""
+def open_browser():
+    on_heroku = 'DYNO' in os.environ
+    if on_heroku:
+        requests.get("https://my-strava-webhook.herokuapp.com")
+    else:
+        requests.get("http://127.0.0.1:5000")
+
+
 if __name__ == "__main__":
+    Timer(1, open_browser).start()
     app.run(debug=True)
