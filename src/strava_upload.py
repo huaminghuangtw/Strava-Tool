@@ -1,17 +1,36 @@
-from authentication import *
-from file_manipulation import *
+import os
+import sys
+import requests
+import subprocess
+import glob
+import time
+import datetime
+import imaplib
+import email
+import re
 from typing import Any, Tuple
 from alive_progress import alive_bar
-import requests
-import sys, os, subprocess, glob
-import time, datetime
-import imaplib, email
-import re
+
+from authentication import *
+from file_manipulation import *
 
 
-# --------------------------------
-# Function to prepare .fit file(s)
-# --------------------------------
+def print_StravaUploadTool():
+	print(r"""
+   _____  _                             _    _         _                    _  _______             _ 
+  / ____|| |                           | |  | |       | |                  | ||__   __|           | |
+ | (___  | |_  _ __  __ _ __   __ __ _ | |  | | _ __  | |  ___    __ _   __| |   | |  ___    ___  | |
+  \___ \ | __|| '__|/ _` |\ \ / // _` || |  | || '_ \ | | / _ \  / _` | / _` |   | | / _ \  / _ \ | |
+  ____) || |_ | |  | (_| | \ V /| (_| || |__| || |_) || || (_) || (_| || (_| |   | || (_) || (_) || |
+ |_____/  \__||_|   \__,_|  \_/  \__,_| \____/ | .__/ |_| \___/  \__,_| \__,_|   |_| \___/  \___/ |_|
+                                               | |                                                   
+                                               |_|                                                   
+    """)
+
+
+# -----------------------------------------------
+# Function to prepare .fit file(s) to be uploaded
+# -----------------------------------------------
 def preprocessing():
     # print(subprocess.getoutput('tasklist'))
     process_list = subprocess.Popen('tasklist', stdout=subprocess.PIPE).communicate()[0]
@@ -63,17 +82,17 @@ def upload_Fit_Activity_Files(access_token: str):
                 try:
                     base_url = "https://www.strava.com/api/v3/uploads"
                     data = {
-						'client_id': STRAVA_CLIENT_ID,
+                        'client_id': STRAVA_CLIENT_ID,
                         'data_type': 'fit'
-					}
+                    }
                     header = {'Authorization': 'Bearer ' + access_token}
                     f = {'file': fit_file}
                     r = requests.post(
-									base_url,
+                                    base_url,
                                     data=data,
                                     headers=header,
                                     files=f
-								)
+                                )
                 except requests.exceptions.RequestException:
                     return None
 
@@ -100,6 +119,11 @@ def upload_Fit_Activity_Files(access_token: str):
                         
                         if (activity_id is not None):
                             print("Activity ID:", activity_id)
+                            print(
+                                "Check this activity here: " + 
+                                "https://www.strava.com/activities/" +
+                                str(activity_id)
+                            )
 
                         # update progress bar
                         bar()

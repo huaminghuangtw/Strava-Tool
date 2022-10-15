@@ -1,4 +1,9 @@
-from file_manipulation import *
+import os
+import sys
+import time
+import glob
+import pyautogui
+import pyperclip
 from alive_progress import alive_bar
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -7,9 +12,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
-import os, glob, pyautogui, time, sys, pyperclip
 from datetime import datetime
 from typing import Any
+
+from file_manipulation import *
 
 
 def fix_Fit_Activity_Files():
@@ -87,7 +93,7 @@ def fix_Fit_Activity_Files():
                             hours -= 12
                         else:
                             afternoon = False
-                            if hours == 0:   # special case
+                            if (hours == 0):   # special case
                                 hours = 12
 
                         element = WebDriverWait(driver, 5).until(
@@ -108,12 +114,13 @@ def fix_Fit_Activity_Files():
                         time.sleep(1)
 
                         # choose A.M. or P.M.
-                        if not afternoon:
+                        if afternoon:
                             element = WebDriverWait(driver, 5).until(
                                 EC.presence_of_element_located((By.XPATH, "//button[@ng-click='toggleMeridian()']"))
                             )
                             element.click()
-                        
+                            time.sleep(1)
+                            
                         # fill in hours
                         element = WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.XPATH, "//input[@ng-model='hours']"))
@@ -165,6 +172,7 @@ def fix_Fit_Activity_Files():
         # Step 12: finally, close the web browser window and change back to the original working directory
         driver.quit()
         os.chdir(owd)
+        print()
 
 
 def finish_file_selection(element: Any):
