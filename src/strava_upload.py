@@ -120,7 +120,7 @@ def upload_Fit_Activity_Files(access_token: str):
                         if (activity_id is not None):
                             print("Activity ID:", activity_id)
                             print(
-                                "Check this activity here: " + 
+                                "Check out here: " + 
                                 "https://www.strava.com/activities/" +
                                 str(activity_id)
                             )

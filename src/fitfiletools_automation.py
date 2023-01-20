@@ -2,6 +2,7 @@ import os
 import sys
 import time
 import glob
+import calendar
 import pyautogui
 import pyperclip
 from alive_progress import alive_bar
@@ -14,6 +15,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import TimeoutException
 from datetime import datetime
 from typing import Any
+from pathlib import Path
 
 from file_manipulation import *
 
@@ -81,27 +83,33 @@ def fix_Fit_Activity_Files():
                         time.sleep(1)
 
                         # Step 5: select the start date of the activity
-                        fit_filename = fitfile.split('-')
-
-                        # convert a month number to a month name
-                        fit_filename[1] = datetime.strptime(fit_filename[1], "%m").strftime("%B")
-
+                        fitfilebasename = Path(fitfile).stem
+                        fitfilebasename_arr = fitfilebasename.split('-')   # YYYY-MM-DD-hh-mm-ss
+                        # parsing
+                        year = int(fitfilebasename_arr[0])
+                        month = int(fitfilebasename_arr[1])
+                        day = int(fitfilebasename_arr[2])
+                        hour = int(fitfilebasename_arr[3])
+                        minute = int(fitfilebasename_arr[4])
+                        second = int(fitfilebasename_arr[5])
+                        
                         # convert time from 24-hour clock format to 12-hour clock format
-                        hours = int(fit_filename[3])
-                        if (hours > 12):
+                        if (hour > 12):
                             afternoon = True
-                            hours -= 12
+                            hour -= 12
                         else:
                             afternoon = False
-                            if (hours == 0):   # special case
-                                hours = 12
+                            if (hour == 0):   # special case
+                                hour = 12
 
                         element = WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.XPATH, "//input[@ng-model='dt']"))
                         )
                         element.clear()
-                        dd_mm_yyyy = fit_filename[2] + '-' + fit_filename[1] + '-' + fit_filename[0]
-                        element.send_keys(dd_mm_yyyy)
+                        # convert a month number to a month name
+                        month_name = calendar.month_name[month]
+                        DD_MM_YYYY = str(day) + '-' + month_name + '-' + str(year)
+                        element.send_keys(DD_MM_YYYY)
                         time.sleep(1)
 
                         # Step 6: select the start time (hours & minutes) of the activity
@@ -110,23 +118,23 @@ def fix_Fit_Activity_Files():
                             EC.presence_of_element_located((By.XPATH, "//input[@ng-model='minutes']"))
                         )
                         element.clear()
-                        element.send_keys(fit_filename[4])
+                        element.send_keys(minute)
                         time.sleep(1)
 
                         # choose A.M. or P.M.
-                        if afternoon:
+                        if (not afternoon):
                             element = WebDriverWait(driver, 5).until(
                                 EC.presence_of_element_located((By.XPATH, "//button[@ng-click='toggleMeridian()']"))
                             )
                             element.click()
                             time.sleep(1)
-                            
+                        
                         # fill in hours
                         element = WebDriverWait(driver, 5).until(
                             EC.presence_of_element_located((By.XPATH, "//input[@ng-model='hours']"))
                         )
                         element.clear()
-                        element.send_keys(str(hours))
+                        element.send_keys(str(hour))
                         time.sleep(1)
 
                         # Step 7: start fixing the activity file
@@ -154,9 +162,9 @@ def fix_Fit_Activity_Files():
                         element.click()
 
                         # Step 10: rename file in Downloads folder and move to FixedActivities folder
-                        newfilename = fit_filename[1] + fit_filename[2] + '.fit'   # mmdd.fit
-                        rename_FitFile(newfilename)
-                        move_To_Fixed_Activities_Folder(newfilename)
+                        newfitfilename = fitfilebasename + "-fixed" + ".fit"
+                        rename_FitFile(newfitfilename)
+                        move_To_Fixed_Activities_Folder(newfitfilename)
 
                         # Step 11: move the original fit file in ZWIFT_ACTIVITY_DIR to OriginalActivities folder
                         move_To_Original_Activities_Folder(fitfile)
