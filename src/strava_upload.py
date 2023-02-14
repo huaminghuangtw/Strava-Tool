@@ -16,7 +16,7 @@ from file_manipulation import *
 
 
 def print_StravaUploadTool():
-	print(r"""
+    print(r"""
    _____  _                             _    _         _                    _  _______             _ 
   / ____|| |                           | |  | |       | |                  | ||__   __|           | |
  | (___  | |_  _ __  __ _ __   __ __ _ | |  | | _ __  | |  ___    __ _   __| |   | |  ___    ___  | |
@@ -32,19 +32,19 @@ def print_StravaUploadTool():
 # Function to prepare .fit file(s) to be uploaded
 # -----------------------------------------------
 def preprocessing():
-    # print(subprocess.getoutput('tasklist'))
     process_list = subprocess.Popen('tasklist', stdout=subprocess.PIPE).communicate()[0]
-    process_name = "ZwiftApp.exe"
-    if process_name.encode() in process_list:
-        exit_code = os.system("taskkill /f /im " + process_name) # Or: subprocess.call("taskkill /f /im " + process_name)
+    zwift = "ZwiftApp.exe"
+    if zwift.encode() in process_list:
+        exit_code = os.system("taskkill /f /im " + zwift)
         if (exit_code == 0):
-            print("Successfully kill the running process: " + process_name)
+            print("Successfully killed", zwift)
         else:
+            print(zwift, "is not running")
             sys.exit("Aborting...")
     else:
         # Enable less secure apps on your Google account:
         # https://myaccount.google.com/lesssecureapps
-        print(process_name + " is not running." + "\n" + "Try to find .fit file(s) from GMAIL...")
+        print(zwift + " is not running." + "\n" + "Try to find .fit file(s) from GMAIL...")
         gmail = imaplib.IMAP4_SSL("imap.gmail.com")
         typ, accountDetails = gmail.login(GMAIL_USER_ID, GMAIL_PASSWORD)
         if (typ != 'OK'):
@@ -120,9 +120,11 @@ def upload_Fit_Activity_Files(access_token: str):
                         if (activity_id is not None):
                             print("Activity ID:", activity_id)
                             print(
-                                "Check out here: " + 
-                                "https://www.strava.com/activities/" +
-                                str(activity_id)
+                                "Congratulations! Check out your workout here: " + 
+                                link(
+                                    "https://www.strava.com/activities/" +
+                                    str(activity_id)
+                                )
                             )
 
                         # update progress bar
@@ -199,3 +201,13 @@ def downloaAttachmentsInEmail(connection, email_id, download_folder):
                     f.close()
     except:
         print('Error downloading all attachments!')
+
+def link(uri, label=None):
+    """
+    Source: https://stackoverflow.com/a/71309268/10351382
+    """
+    if label is None: 
+        label = uri
+    parameters = '' 
+    escape_mask = '\033]8;{};{}\033\\{}\033]8;;\033\\'
+    return escape_mask.format(parameters, uri, label)
