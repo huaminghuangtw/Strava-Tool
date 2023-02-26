@@ -16,16 +16,6 @@ except KeyError:
     print("[ERROR]: Please add STRAVA_CLIENT_SECRET to the list of environment variables")
 
 try:
-    GMAIL_USER_ID = os.environ["GMAIL_USER_ID"]
-except KeyError:
-    print("[ERROR]: Please add GMAIL_USER_ID to the list of environment variables")
-
-try:
-    GMAIL_PASSWORD = os.environ["GMAIL_PASSWORD"]
-except KeyError:
-	print("[ERROR]: Please add GMAIL_PASSWORD to the list of environment variables")
-
-try:
     LINE_CHANNEL_ACCESS_TOKEN = os.environ["LINE_CHANNEL_ACCESS_TOKEN"]
 except KeyError:
     print("[ERROR]: Please add LINE_CHANNEL_ACCESS_TOKEN to the list of environment variables")

@@ -1,12 +1,8 @@
 import os
-import sys
 import requests
 import subprocess
 import glob
 import time
-import datetime
-import imaplib
-import email
 import re
 from typing import Any, Tuple
 from alive_progress import alive_bar
@@ -38,33 +34,6 @@ def preprocessing():
         exit_code = os.system("taskkill /f /im " + zwift)
         if (exit_code == 0):
             print("Successfully killed", zwift)
-        else:
-            print(zwift, "is not running")
-            sys.exit("Aborting...")
-    else:
-        # Enable less secure apps on your Google account:
-        # https://myaccount.google.com/lesssecureapps
-        print(zwift + " is not running." + "\n" + "Try to find .fit file(s) from GMAIL...")
-        gmail = imaplib.IMAP4_SSL("imap.gmail.com")
-        typ, accountDetails = gmail.login(GMAIL_USER_ID, GMAIL_PASSWORD)
-        if (typ != 'OK'):
-            print('Not able to sign in!')
-            raise
-        typ, data = gmail.select('Inbox')
-        if (typ != 'OK'):
-            print('Error searching Inbox!')
-            raise
-        today = datetime.date.today().strftime("%d-%b-%Y")
-        typ, email_list = gmail.search(None, f'(ON {today} TO {GMAIL_USER_ID})')
-        # print(email_list)
-        # Useful links:
-        #    1. https://docs.python.org/3/library/imaplib.html#imaplib.IMAP4.search
-        #    2. https://gist.github.com/martinrusev/6121028
-        email_list = email_list[0].split()
-        for email_id in email_list:
-            downloaAttachmentsInEmail(gmail, email_id, ZWIFT_ACTIVITY_DIR)
-        gmail.close()
-        gmail.logout()
 
 
 # ------------------------------------
@@ -171,36 +140,6 @@ def wait(poll_interval: float):
 
 def findWholeWord(w):
     return re.compile(r'\b({0})\b'.format(w), flags=re.IGNORECASE).search
-
-def downloaAttachmentsInEmail(connection, email_id, download_folder):
-    """
-    Function to download all attachment files for a given email
-    """
-    try:
-        typ, data = connection.fetch(email_id, "(BODY.PEEK[])") # use PEEK so we don't change the UNSEEN status of the email messages
-        if (typ != 'OK'):
-            print('Error fetching email!')
-            raise
-        email_body = data[0][1]
-        raw_emails = email.message_from_bytes(email_body)
-        # print(raw_emails)
-        for mail in raw_emails.walk():
-            if (mail.get_content_maintype() == 'multipart'):
-                # print(mail.as_string())
-                continue
-            if (mail.get('Content-Disposition') is None):
-                # print(mail.as_string())
-                continue
-            fileName = mail.get_filename()
-            if fileName.endswith('.fit'):
-                attachment_path = os.path.join(download_folder, fileName)
-                if not os.path.isfile(attachment_path):
-                    print('Downloading email attachment: ' + fileName + '...')
-                    f = open(attachment_path, 'wb')
-                    f.write(mail.get_payload(decode=True))
-                    f.close()
-    except:
-        print('Error downloading all attachments!')
 
 def link(uri, label=None):
     """
